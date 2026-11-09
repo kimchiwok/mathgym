@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Math Gym</title>
+<meta name="description" content="Learn math at your level: placement test, short lessons, practice and progress tracking. English, Русский, Қазақша.">
+<meta name="theme-color" content="#0f6e66">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Math Gym">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f5f1;--card:#ffffff;--ink:#1c1d1f;--muted:#6b6d70;--line:#e4e2dc;
+  --accent:#0f6e66;--accent-ink:#ffffff;--accent-soft:#e3f1ef;
+  --good:#1e8a4c;--good-soft:#e5f4ea;--mid:#b7791f;--mid-soft:#fbf1df;--low:#c2412d;--low-soft:#fbe7e3;
+  --new:#8a8c90;--shadow:0 1px 2px rgba(0,0,0,.04),0 4px 16px rgba(0,0,0,.04);
+}
+@media (prefers-color-scheme:dark){
+  :root{--bg:#141517;--card:#1d1f22;--ink:#ecebe7;--muted:#9a9ca0;--line:#2e3135;
+  --accent:#3fb3a7;--accent-ink:#0d1413;--accent-soft:#1c3331;
+  --good:#4cc283;--good-soft:#1a3024;--mid:#e2a94a;--mid-soft:#352a17;--low:#ef7a65;--low-soft:#3a201c;--new:#777a7f;--shadow:none}
+}
+*{box-sizing:border-box}
+html{touch-action:pan-y;-webkit-text-size-adjust:100%;text-size-adjust:100%;overflow-x:hidden}
+body{touch-action:pan-y;overflow-x:hidden;overscroll-behavior-x:none}
+button,a,input,select{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+input,select,textarea{font-size:max(16px,1em)}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+button,input,select{font:inherit;color:inherit}
+.wrap{max-width:860px;margin:0 auto;padding:calc(20px + env(safe-area-inset-top)) calc(18px + env(safe-area-inset-right)) calc(60px + env(safe-area-inset-bottom)) calc(18px + env(safe-area-inset-left))}
+header{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:22px}
+.brand{font-weight:700;font-size:19px;letter-spacing:-.01em;display:flex;align-items:center;gap:8px;cursor:pointer}
+.brand .logo{width:28px;height:28px;border-radius:8px;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-size:15px;font-weight:700}
+nav{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}
+nav button{background:none;border:0;padding:7px 12px;border-radius:8px;cursor:pointer;color:var(--muted);font-weight:500}
+nav button.on{background:var(--card);color:var(--ink);box-shadow:var(--shadow)}
+nav button:hover{color:var(--ink)}
+.langsw{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--card)}
+.langsw button{border:0;background:none;padding:6px 9px;font-size:13px;font-weight:600;cursor:pointer;color:var(--muted)}
+.langsw button.on{background:var(--ink);color:var(--bg)}
+.chip{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:var(--card);border-radius:20px;padding:4px 11px 4px 4px;cursor:pointer;font-size:14px;font-weight:600;max-width:170px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chip.on{border-color:var(--accent)}
+.av{width:24px;height:24px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:inline-grid;place-items:center;font-weight:700;font-size:13px;flex:none}
+.av.big{width:40px;height:40px;font-size:17px}
+.prow{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.lab{display:block;font-size:13px;font-weight:600;color:var(--muted);margin:12px 0 5px}
+.field{width:100%;font-size:18px;padding:11px 13px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);outline:none}
+.field:focus{border-color:var(--accent)}
+.agenote{background:var(--accent-soft);border-radius:10px;padding:12px 14px;margin:16px 0 4px;font-size:14px;line-height:1.6}
+.lvlsel{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:6px 8px;font-size:16px;max-width:100%}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;box-shadow:var(--shadow);margin-bottom:16px}
+h1{font-size:28px;line-height:1.2;letter-spacing:-.02em;margin:0 0 8px}
+h2{font-size:20px;letter-spacing:-.01em;margin:0 0 10px}
+h3{font-size:16px;margin:0 0 6px}
+p{margin:0 0 12px}
+.muted{color:var(--muted)}
+.small{font-size:14px}
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--card);padding:10px 16px;border-radius:10px;cursor:pointer;font-weight:600;font-size:15px}
+.btn:hover{border-color:var(--muted)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.primary:hover{filter:brightness(1.07)}
+.btn.ghost{border-color:transparent;background:none;color:var(--muted)}
+.btn.ghost:hover{color:var(--ink)}
+.btn.sm{padding:6px 11px;font-size:14px;border-radius:8px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+@media(max-width:600px){.stats{grid-template-columns:repeat(2,1fr)}h1{font-size:24px}}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px}
+.stat b{display:block;font-size:22px;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.stat span{font-size:13px;color:var(--muted)}
+.topic{border:1px solid var(--line);border-radius:12px;padding:16px;background:var(--card);display:flex;flex-direction:column;gap:8px}
+.topic .t{font-weight:600}
+.bar{height:6px;background:var(--line);border-radius:4px;overflow:hidden}
+.bar>i{display:block;height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:2px 8px;border-radius:20px}
+.pill.new{background:var(--line);color:var(--new)}
+.pill.good{background:var(--good-soft);color:var(--good)}
+.pill.mid{background:var(--mid-soft);color:var(--mid)}
+.pill.low{background:var(--low-soft);color:var(--low)}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
+.hero{background:linear-gradient(135deg,var(--accent-soft),var(--card) 70%)}
+.levels{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-top:10px}
+.lvlcard{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--card);cursor:pointer;text-align:left}
+.lvlcard:hover{border-color:var(--accent)}
+.lvlcard b{display:block}
+.qwrap{max-width:640px;margin:0 auto}
+.qtop{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:14px;color:var(--muted)}
+.qbar{height:4px;background:var(--line);border-radius:3px;margin-bottom:22px;overflow:hidden}
+.qbar>i{display:block;height:100%;background:var(--accent)}
+.qtext{font-size:22px;line-height:1.45;font-weight:500;margin:6px 0 20px;letter-spacing:-.01em}
+.qtext sup,.qtext sub{font-size:.65em}
+.ansrow{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.ansrow input{flex:1;min-width:0;font-size:20px;padding:12px 14px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);outline:none;font-variant-numeric:tabular-nums}
+.ansrow input:focus{border-color:var(--accent)}
+.ansrow input.ok{border-color:var(--good);background:var(--good-soft)}
+.ansrow input.bad{border-color:var(--low);background:var(--low-soft)}
+.unit{font-size:18px;color:var(--muted);min-width:20px}
+.hint{font-size:13px;color:var(--muted);margin:-4px 0 14px}
+.fb{border-radius:12px;padding:14px 16px;margin:14px 0 4px;font-size:15px}
+.fb.ok{background:var(--good-soft)}
+.fb.bad{background:var(--low-soft)}
+.fb .h{font-weight:700;margin-bottom:4px}
+.fb.ok .h{color:var(--good)} .fb.bad .h{color:var(--low)}
+.msg{color:var(--low);font-size:14px;min-height:20px}
+.lesson h2{margin-top:6px}
+.lesson ul{padding-left:20px;margin:0 0 14px}
+.lesson li{margin-bottom:6px}
+.ex{background:var(--accent-soft);border-radius:12px;padding:14px 16px;margin:12px 0}
+.ex .eyebrow{margin-bottom:4px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.tabs button{border:1px solid var(--line);background:var(--card);padding:7px 12px;border-radius:20px;cursor:pointer;font-size:14px;font-weight:500}
+.tabs button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+table{width:100%;border-collapse:collapse;font-size:15px}
+td,th{padding:9px 6px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:600}
+td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+details{border-top:1px solid var(--line);padding:10px 0}
+details summary{cursor:pointer;list-style:none;display:flex;gap:10px;align-items:flex-start}
+details summary::-webkit-details-marker{display:none}
+details .body{padding:8px 0 0 28px;font-size:15px}
+.mark{width:18px;flex:none;font-weight:700}
+.mark.ok{color:var(--good)} .mark.bad{color:var(--low)}
+.big{font-size:44px;font-weight:700;letter-spacing:-.03em;line-height:1}
+.banner{border-left:4px solid var(--good);background:var(--good-soft);border-radius:10px;padding:12px 14px;margin-bottom:16px}
+footer{margin-top:30px;font-size:13px;color:var(--muted);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;vertical-align:1px;background:var(--new)}
+.dot.on{background:var(--good)}
+kbd{font:12px/1 Inter,sans-serif;border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:2px 5px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header id="hdr"></header>
+  <main id="app"></main>
+  <footer><span id="sync"><span class="dot"></span></span><span id="tip"></span></footer>
+</div>
+<script>
+/* ---------- language ---------- */
+const LANGS={en:'EN',ru:'РУ',kk:'ҚАЗ'};
+let lang=(()=>{try{const s=JSON.parse(localStorage.getItem('mathgym.v1')||'{}');if(s.lang&&LANGS[s.lang])return s.lang;}catch(e){}const n=(navigator.language||'en').toLowerCase();return n.startsWith('kk')?'kk':n.startsWith('ru')?'ru':'en';})();
+const X=(en,ru,kk)=>lang==='ru'?ru:lang==='kk'?kk:en;
+const LOC=()=>lang==='en'?'en-US':'ru-RU';
+
+/* ---------- seeded randomness (so a question can be re-rendered in another language) ---------- */
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+let _rng=Math.random;const R=()=>_rng();
+const ri=(a,b)=>Math.floor(R()*(b-a+1))+a;
+const pick=a=>a[Math.floor(R()*a.length)];
+
+/* ---------- formatting ---------- */
+function fmt(n,dp=4){const f=Math.pow(10,dp);const r=Math.round(n*f)/f;return(r<0?'−':'')+Math.abs(r).toLocaleString(LOC(),{maximumFractionDigits:dp});}
+const N=n=>fmt(n);
+const P=n=>n<0?'('+N(n)+')':N(n);
+function money(n,c='$'){const r=Math.round(n*100)/100;const whole=Number.isInteger(r);return(r<0?'−':'')+c+Math.abs(r).toLocaleString(LOC(),{minimumFractionDigits:whole?0:2,maximumFractionDigits:2});}
+const tg=n=>fmt(n,2)+' ₸';
+const gcd=(a,b)=>b?gcd(b,a%b):Math.abs(a);
+function frac(n,d){const g=gcd(n,d)||1;n/=g;d/=g;if(d<0){n=-n;d=-d}return d===1?N(n):`${N(n)}/${d}`;}
+function term(c,v,first){if(c===0)return'';const a=Math.abs(c);const sign=c<0?(first?'−':' − '):(first?'':' + ');return sign+((v&&a===1)?'':fmt(a))+v;}
+function poly(cs,vars){let s='',first=true;cs.forEach((c,i)=>{const t=term(c,vars[i],first);if(t){s+=t;first=false;}});return s||'0';}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const today=()=>new Date().toLocaleDateString('en-CA');
+const ruP=(n,f)=>{const a=Math.abs(n)%100,b=a%10;return a>10&&a<20?f[2]:b===1?f[0]:b>=2&&b<=4?f[1]:f[2];};
+const yrs=n=>X(n===1?'year':'years',(n%10===1&&n%100!==11)?'год':([2,3,4].includes(n%10)&&![12,13,14].includes(n%100))?'года':'лет','жыл');
+function parseNum(s){
+  s=String(s).trim().replace(/\s/g,'').replace(/[%₸$]/g,'').replace(/[a-zа-яёәғқңөұүһі²]+/gi,'').replace(/[−–]/g,'-');
+  if(!s)return NaN;
+  if(lang==='en'){
+    if(s.includes(',')&&s.includes('.'))s=s.replace(/,/g,'');
+    else if(s.includes(',')){const p=s.split(',');s=(p.length===2&&p[1].length!==3)?p.join('.'):s.replace(/,/g,'');}
+  }else{
+    if(s.includes(',')&&s.includes('.'))s=s.replace(/\./g,'').replace(',','.');
+    else s=s.replace(',','.');
+  }
+  const fr=s.match(/^(-?\d+(?:\.\d+)?)\/(-?\d+(?:\.\d+)?)$/);
+  if(fr){const d=+fr[2];return d?+fr[1]/d:NaN;}
+  if(!/^-?(\d+\.?\d*|\.\d+)$/.test(s))return NaN;
+  return parseFloat(s);
+}
+
+/* ---------- interface text ---------- */
+const UI={
+en:{home:'Home',learn:'Learn',progress:'Progress',quitTest:'✕ Quit test',quitSession:'✕ End session',lvl:(l,n)=>`Level ${l} · ${n}`,lvlShort:l=>`Level ${l}`,
+ welcome:'Welcome',findH:"Let's find your level",
+ findP:(n,ls)=>`A ${n}-question placement test, matched to your age, covers: ${ls}. There's no feedback during the test, so just answer honestly. If you don't know one, press <b>I don't know</b>. Guessing makes the result less useful.`,
+ findNote:'Takes 10–15 minutes. Paper helps.',startTest:'Start placement test →',pickH:'Or pick a level yourself',pickP:'You can change it any time.',
+ banner:(n,l2,n2)=>`<b>You've mastered ${n}.</b> Ready for Level ${l2}, ${n2}?`,moveUp:'Move up →',keepGoing:'Keep going',ready:'Ready when you are',levelMastery:p=>`Level mastery ${p}%`,
+ mixedBtn:'Mixed practice · 10 questions',nextLesson:n=>`Next lesson: ${n}`,focusOn:n=>`Focus on: ${n}`,sStreak:'day streak',sXp:'XP',sAnswered:'questions answered',sAcc:'accuracy',yourTopics:'Your topics',
+ lessonBtn:'Lesson',practiceBtn:'Practice',correctOf:(c,a)=>`${c}/${a} correct`,notStarted:'Not started',lessonRead:'lesson read',
+ learnP:'Short lessons with a worked example, then practice. Your level is marked ★, but you can browse any of them.',example:'Worked example',practiceThis:'Practice this · 8 questions',allLessons:'All lessons',
+ placementTest:'Placement test',correct:'Correct',howItWorks:"Here's how it works",notQuite:'Not quite',answer:'answer',yourAnswer:'Your answer',next:'Next →',seeResults:'See results',finish:'Finish',check:'Check',idk:"I don't know",
+ revYour:'Your answer',revCorrect:'Correct',skipped:'(skipped)',resEyebrow:(s,t)=>`Placement result · ${s}/${t} correct`,startAt:(l,n)=>`Start at Level ${l}: ${n}`,
+ res4:n=>`You passed every level below ${n}. This is where your stretch is.`,res1:'Starting at the beginning is the right call. It builds the speed and confidence everything else rests on.',
+ resMid:(a,b)=>`You were solid through ${a}. ${b} is where the gaps showed, so that is where practice pays off most.`,goDash:'Go to my dashboard →',readFirst:'Read the first lesson',byLevel:'By level',thLevel:'Level',thScore:'Score',
+ passRule:'A level counts as passed at about 70% correct. Disagree with the result? Switch levels in the top bar any time.',reviewAns:'Review your answers',done:t=>`${t} · done`,
+ sum90:'Excellent, that topic is sinking in.',sum70:'Good work. A couple more rounds and this will stick.',sum50:'Solid effort. Review the misses below, they show exactly what to fix.',sum0:'Tough round. Read the lesson again, then retry, which is how learning works.',
+ again:'Another round',reread:'Re-read lesson',dashboard:'Dashboard',review:'Review',masteryH:'Mastery by topic',masteryP:'Mastery is your accuracy over the last 10 questions in a topic. 80%+ across 5 or more questions counts as mastered.',
+ thTopic:'Topic',thRecent:'Recent',thAll:'All-time',current:'current',recent:'Recent sessions',thDate:'Date',thSession:'Session',noSessions:'No sessions yet.',placementH:'Placement',
+ taken:(d,s,t,l,n)=>`Taken ${d}: ${s}/${t}, placed at Level ${l} (${n}).`,notTaken:'Not taken yet.',retake:'Retake placement test',take:'Take placement test',resetAsk:'Reset all progress',resetYes:'Yes, erase everything',cancel:'Cancel',
+ synced:'Progress saved to your account',connecting:'Connecting…',local:'Progress is saved on this device',tip:'Tip: fractions like 3/8 are accepted. Press <kbd>Enter</kbd> to check.',
+ partial:' (partial)',mixedTitle:l=>`Mixed practice · Level ${l}`,msgNum:'Enter a number. Fractions like 3/8 and negatives like −4 are fine.',msgType:`Type an answer, or press "I don't know".`,
+ st_new:'New',st_good:'Mastered',st_mid:'Getting there',st_low:'Needs work',hint2:'Fraction or decimal (2 dp) both fine.',hint3:'Fraction or decimal (3 dp) both fine.',hintF:'Fraction or decimal both fine.',language:'Language',hi:n=>`Hi, ${n}!`,regH:'Create your profile',regEditH:'Edit profile',regP:'Just a nickname and your age. Your age decides which tasks you get.',nickL:'Nickname',ageL:'Age',cont:'Continue →',saveBtn:'Save',ageNoteH:'Tasks are matched to your age',
+ note_kid:'Ages 6–9: Junior math (adding, times tables, word problems, shapes), then Foundations.',note_pre:'Ages 10–13: Junior math, Foundations and School algebra.',note_teen:'Ages 14–17: Foundations through Advanced, with school algebra at the core.',note_adult:'Adult track: all four levels, including business math.',
+ errNick:'Enter a nickname (up to 20 characters).',errAge:'Enter an age between 6 and 99.',profiles:'Profiles',profilesP:'Each profile has its own level and progress. Handy when family members share a device.',switchTo:'Switch',editBtn:'Edit',addProfile:'+ Add profile',del:'Delete',delYes:'Yes, delete',active:'active',ageShort:a=>`age ${a}`,noLevel:'no level yet',ageLine:(a,n)=>`Age ${a} · ${n}`,changeProfile:'Change',decrease:'(use − for a decrease)'},
+ru:{home:'Главная',learn:'Обучение',progress:'Прогресс',quitTest:'✕ Выйти из теста',quitSession:'✕ Завершить',lvl:(l,n)=>`Уровень ${l} · ${n}`,lvlShort:l=>`Уровень ${l}`,
+ welcome:'Добро пожаловать',findH:'Определим ваш уровень',
+ findP:(n,ls)=>`Тест из ${n} вопросов подобран по возрасту и охватывает: ${ls}. Во время теста подсказок нет — просто отвечайте честно. Если не знаете ответа, нажмите <b>Не знаю</b>: угадывание делает результат менее точным.`,
+ findNote:'Займёт 10–15 минут. Пригодится бумага.',startTest:'Начать тест →',pickH:'Или выберите уровень сами',pickP:'Его можно изменить в любой момент.',
+ banner:(n,l2,n2)=>`<b>Уровень «${n}» освоен.</b> Готовы к уровню ${l2} — «${n2}»?`,moveUp:'Перейти →',keepGoing:'Продолжаем',ready:'Можно начинать',levelMastery:p=>`Освоение уровня: ${p}%`,
+ mixedBtn:'Смешанная практика · 10 вопросов',nextLesson:n=>`Следующий урок: ${n}`,focusOn:n=>`Подтянуть: ${n}`,sStreak:'дней подряд',sXp:'XP',sAnswered:'вопросов решено',sAcc:'точность',yourTopics:'Ваши темы',
+ lessonBtn:'Урок',practiceBtn:'Практика',correctOf:(c,a)=>`${c}/${a} верно`,notStarted:'Не начато',lessonRead:'урок прочитан',
+ learnP:'Короткие уроки с разобранным примером, затем практика. Ваш уровень отмечен ★, но открыть можно любой.',example:'Пример',practiceThis:'Практика · 8 вопросов',allLessons:'Все уроки',
+ placementTest:'Тест на уровень',correct:'Верно',howItWorks:'Как это решается',notQuite:'Не совсем',answer:'ответ',yourAnswer:'Ваш ответ',next:'Далее →',seeResults:'Результаты',finish:'Завершить',check:'Проверить',idk:'Не знаю',
+ revYour:'Ваш ответ',revCorrect:'Правильно',skipped:'(пропущено)',resEyebrow:(s,t)=>`Результат теста · ${s}/${t} верно`,startAt:(l,n)=>`Ваш уровень: ${l} — ${n}`,
+ res4:n=>`Все уровни ниже «${n}» пройдены — здесь и будет ваш рост.`,res1:'Лучше всего начать с начала: это даёт скорость и уверенность, на которых строится всё остальное.',
+ resMid:(a,b)=>`Уровень «${a}» у вас уверенный. Пробелы видны на уровне «${b}» — там практика даст больше всего.`,goDash:'На главную →',readFirst:'Прочитать первый урок',byLevel:'По уровням',thLevel:'Уровень',thScore:'Баллы',
+ passRule:'Уровень засчитывается примерно при 70% верных ответов. Не согласны с результатом? Уровень можно сменить в верхней панели.',reviewAns:'Разбор ответов',done:t=>`${t} · готово`,
+ sum90:'Отлично, тема усваивается.',sum70:'Хорошая работа. Ещё пара раундов — и закрепится.',sum50:'Неплохо. Посмотрите разбор ошибок ниже — там видно, что исправить.',sum0:'Непростой раунд. Перечитайте урок и попробуйте снова — так и учатся.',
+ again:'Ещё раунд',reread:'Перечитать урок',dashboard:'Главная',review:'Разбор',masteryH:'Освоение по темам',masteryP:'Освоение — это точность по последним 10 вопросам темы. 80%+ при 5 и более вопросах — тема освоена.',
+ thTopic:'Тема',thRecent:'Недавно',thAll:'Всего',current:'текущий',recent:'Последние занятия',thDate:'Дата',thSession:'Занятие',noSessions:'Занятий пока нет.',placementH:'Тест на уровень',
+ taken:(d,s,t,l,n)=>`Пройден ${d}: ${s}/${t}, уровень ${l} (${n}).`,notTaken:'Ещё не пройден.',retake:'Пройти тест заново',take:'Пройти тест',resetAsk:'Сбросить весь прогресс',resetYes:'Да, удалить всё',cancel:'Отмена',
+ synced:'Прогресс сохраняется в вашем аккаунте',connecting:'Подключение…',local:'Прогресс сохраняется на этом устройстве',tip:'Можно вводить дроби, например 3/8. <kbd>Enter</kbd> — проверить.',
+ partial:' (не завершено)',mixedTitle:l=>`Смешанная практика · уровень ${l}`,msgNum:'Введите число. Можно дробь (3/8) или отрицательное число (−4).',msgType:'Введите ответ или нажмите «Не знаю».',
+ st_new:'Новое',st_good:'Освоено',st_mid:'Почти',st_low:'Нужно подтянуть',hint2:'Можно дробью или десятичной (2 знака).',hint3:'Можно дробью или десятичной (3 знака).',hintF:'Можно дробью или десятичной.',language:'Язык',hi:n=>`Привет, ${n}!`,regH:'Создайте профиль',regEditH:'Изменить профиль',regP:'Только никнейм и возраст. От возраста зависит, какие задания вы получите.',nickL:'Никнейм',ageL:'Возраст',cont:'Продолжить →',saveBtn:'Сохранить',ageNoteH:'Задания подбираются по возрасту',
+ note_kid:'6–9 лет: начальная математика (сложение, таблица умножения, задачи, фигуры), затем основы.',note_pre:'10–13 лет: начальная математика, основы и школьная алгебра.',note_teen:'14–17 лет: от основ до продвинутого уровня, в центре — школьная алгебра.',note_adult:'Взрослый трек: все четыре уровня, включая бизнес-математику.',
+ errNick:'Введите никнейм (до 20 символов).',errAge:'Введите возраст от 6 до 99.',profiles:'Профили',profilesP:'У каждого профиля свой уровень и прогресс. Удобно, если устройством пользуется вся семья.',switchTo:'Выбрать',editBtn:'Изменить',addProfile:'+ Добавить профиль',del:'Удалить',delYes:'Да, удалить',active:'активный',ageShort:a=>`${a} ${ruP(a,['год','года','лет'])}`,noLevel:'уровень не выбран',ageLine:(a,n)=>`${a} ${ruP(a,['год','года','лет'])} · ${n}`,changeProfile:'Изменить',decrease:'(уменьшение — со знаком −)'},
+kk:{home:'Басты бет',learn:'Оқу',progress:'Үлгерім',quitTest:'✕ Тесттен шығу',quitSession:'✕ Аяқтау',lvl:(l,n)=>`${l}-деңгей · ${n}`,lvlShort:l=>`${l}-деңгей`,
+ welcome:'Қош келдіңіз',findH:'Деңгейіңізді анықтайық',
+ findP:(n,ls)=>`${n} сұрақтан тұратын тест жасыңызға сай таңдалған және мыналарды қамтиды: ${ls}. Тест кезінде кері байланыс жоқ, сондықтан шынайы жауап беріңіз. Жауабын білмесеңіз, <b>Білмеймін</b> батырмасын басыңыз: болжам нәтижені дәлсіз етеді.`,
+ findNote:'10–15 минут алады. Қағаз пайдалы.',startTest:'Тестті бастау →',pickH:'Немесе деңгейді өзіңіз таңдаңыз',pickP:'Оны кез келген уақытта өзгертуге болады.',
+ banner:(n,l2,n2)=>`<b>«${n}» деңгейі меңгерілді.</b> ${l2}-деңгейге — «${n2}» — дайынсыз ба?`,moveUp:'Келесі деңгейге →',keepGoing:'Жалғастырайық',ready:'Бастауға дайынсыз',levelMastery:p=>`Деңгейді меңгеру: ${p}%`,
+ mixedBtn:'Аралас жаттығу · 10 сұрақ',nextLesson:n=>`Келесі сабақ: ${n}`,focusOn:n=>`Пысықтау: ${n}`,sStreak:'күн қатарынан',sXp:'XP',sAnswered:'сұраққа жауап берілді',sAcc:'дәлдік',yourTopics:'Сіздің тақырыптарыңыз',
+ lessonBtn:'Сабақ',practiceBtn:'Жаттығу',correctOf:(c,a)=>`${c}/${a} дұрыс`,notStarted:'Басталмаған',lessonRead:'сабақ оқылды',
+ learnP:'Шешілген мысалы бар қысқа сабақтар, содан кейін жаттығу. Сіздің деңгейіңіз ★ белгісімен көрсетілген, бірақ кез келгенін ашуға болады.',example:'Мысал',practiceThis:'Жаттығу · 8 сұрақ',allLessons:'Барлық сабақтар',
+ placementTest:'Деңгей анықтау тесті',correct:'Дұрыс',howItWorks:'Былай шешіледі',notQuite:'Дәл емес',answer:'жауабы',yourAnswer:'Жауабыңыз',next:'Келесі →',seeResults:'Нәтижелер',finish:'Аяқтау',check:'Тексеру',idk:'Білмеймін',
+ revYour:'Сіздің жауабыңыз',revCorrect:'Дұрыс жауап',skipped:'(өткізілді)',resEyebrow:(s,t)=>`Тест нәтижесі · ${s}/${t} дұрыс`,startAt:(l,n)=>`Сіздің деңгейіңіз: ${l} — ${n}`,
+ res4:n=>`«${n}» деңгейінен төменгі деңгейлердің бәрінен өттіңіз — өсу осы жерде.`,res1:'Басынан бастаған дұрыс: бұл қалғанының бәріне қажет жылдамдық пен сенімділік береді.',
+ resMid:(a,b)=>`«${a}» деңгейін жақсы білесіз. Олқылықтар «${b}» деңгейінде байқалды, сондықтан жаттығу сол жерде көбірек пайда береді.`,goDash:'Басты бетке →',readFirst:'Алғашқы сабақты оқу',byLevel:'Деңгейлер бойынша',thLevel:'Деңгей',thScore:'Ұпай',
+ passRule:'Деңгей шамамен 70% дұрыс жауапта өтті деп саналады. Нәтижемен келіспейсіз бе? Деңгейді жоғарғы панельде ауыстыруға болады.',reviewAns:'Жауаптарды талдау',done:t=>`${t} · аяқталды`,
+ sum90:'Тамаша, тақырып жақсы меңгерілуде.',sum70:'Жақсы жұмыс. Тағы бір-екі раунд — бекиді.',sum50:'Жаман емес. Төмендегі қателерді қараңыз — нені түзету керегі көрінеді.',sum0:'Қиын раунд болды. Сабақты қайта оқып, тағы көріңіз — оқу осылай жүреді.',
+ again:'Тағы бір раунд',reread:'Сабақты қайта оқу',dashboard:'Басты бет',review:'Талдау',masteryH:'Тақырыптар бойынша меңгеру',masteryP:'Меңгеру — тақырыптағы соңғы 10 сұрақ бойынша дәлдік. 5 не одан көп сұрақта 80%+ болса, тақырып меңгерілді.',
+ thTopic:'Тақырып',thRecent:'Соңғы',thAll:'Барлығы',current:'ағымдағы',recent:'Соңғы сабақтар',thDate:'Күні',thSession:'Сабақ',noSessions:'Әзірге сабақ жоқ.',placementH:'Деңгей анықтау',
+ taken:(d,s,t,l,n)=>`${d} тапсырылды: ${s}/${t}, ${l}-деңгей (${n}).`,notTaken:'Әлі тапсырылмаған.',retake:'Тестті қайта тапсыру',take:'Тестті тапсыру',resetAsk:'Барлық үлгерімді өшіру',resetYes:'Иә, бәрін өшіру',cancel:'Болдырмау',
+ synced:'Үлгерім аккаунтыңызда сақталады',connecting:'Қосылуда…',local:'Үлгерім осы құрылғыда сақталады',tip:'3/8 сияқты бөлшектерді енгізуге болады. <kbd>Enter</kbd> — тексеру.',
+ partial:' (аяқталмаған)',mixedTitle:l=>`Аралас жаттығу · ${l}-деңгей`,msgNum:'Сан енгізіңіз. Бөлшек (3/8) не теріс сан (−4) болады.',msgType:'Жауап жазыңыз немесе «Білмеймін» батырмасын басыңыз.',
+ st_new:'Жаңа',st_good:'Меңгерілді',st_mid:'Жақсы келеді',st_low:'Пысықтау керек',hint2:'Бөлшек не ондық бөлшек (2 таңба) болады.',hint3:'Бөлшек не ондық бөлшек (3 таңба) болады.',hintF:'Бөлшек не ондық бөлшек болады.',language:'Тіл',hi:n=>`Сәлем, ${n}!`,regH:'Профиль жасаңыз',regEditH:'Профильді өзгерту',regP:'Тек лақап ат пен жасыңыз. Қандай тапсырма алатыныңыз жасқа байланысты.',nickL:'Лақап ат',ageL:'Жасы',cont:'Жалғастыру →',saveBtn:'Сақтау',ageNoteH:'Тапсырмалар жасқа сай таңдалады',
+ note_kid:'6–9 жас: бастауыш математика (қосу, көбейту кестесі, есептер, фигуралар), содан кейін негіздер.',note_pre:'10–13 жас: бастауыш математика, негіздер және мектеп алгебрасы.',note_teen:'14–17 жас: негіздерден күрделі деңгейге дейін, басты назар — мектеп алгебрасында.',note_adult:'Ересектер бағыты: барлық төрт деңгей, бизнес-математиканы қоса.',
+ errNick:'Лақап ат енгізіңіз (20 таңбаға дейін).',errAge:'6 мен 99 аралығындағы жасты енгізіңіз.',profiles:'Профильдер',profilesP:'Әр профильдің өз деңгейі мен үлгерімі бар. Құрылғыны отбасы бірге қолданса ыңғайлы.',switchTo:'Таңдау',editBtn:'Өзгерту',addProfile:'+ Профиль қосу',del:'Жою',delYes:'Иә, жою',active:'белсенді',ageShort:a=>`${a} жас`,noLevel:'деңгей таңдалмаған',ageLine:(a,n)=>`${a} жас · ${n}`,changeProfile:'Өзгерту',decrease:'(азаю болса, − таңбасымен)'}
+};
+const t=(k,...a)=>{const v=(UI[lang]&&UI[lang][k]!==undefined)?UI[lang][k]:UI.en[k];return typeof v==='function'?v(...a):v;};
+
+const LEVELS={
+ 0:{name:{en:'Junior',ru:'Начальный',kk:'Бастауыш'},desc:{en:'Adding & subtracting, times tables, word problems, shapes & measures',ru:'Сложение и вычитание, таблица умножения, задачи, фигуры и меры',kk:'Қосу мен азайту, көбейту кестесі, есептер, фигуралар мен өлшемдер'}},
+ 1:{name:{en:'Foundations',ru:'Основы',kk:'Негіздер'},desc:{en:'Mental arithmetic, percentages, fractions, order of operations',ru:'Устный счёт, проценты, дроби, порядок действий',kk:'Ауызша есептеу, пайыздар, бөлшектер, амалдар реті'}},
+ 2:{name:{en:'School algebra',ru:'Школьная алгебра',kk:'Мектеп алгебрасы'},desc:{en:'Equations, expressions, simultaneous equations, powers',ru:'Уравнения, выражения, системы уравнений, степени',kk:'Теңдеулер, өрнектер, теңдеулер жүйесі, дәрежелер'}},
+ 3:{name:{en:'Business math',ru:'Бизнес-математика',kk:'Бизнес-математика'},desc:{en:'Percent change, margin & markup, interest, costs & FX',ru:'Изменение в %, маржа и наценка, проценты по вкладам, затраты и валюта',kk:'Пайыздық өзгеріс, маржа мен үстеме, пайыздық өсім, шығындар мен валюта'}},
+ 4:{name:{en:'Advanced',ru:'Продвинутый',kk:'Күрделі'},desc:{en:'Quadratics, logarithms, calculus basics, probability',ru:'Квадратные уравнения, логарифмы, основы анализа, вероятность',kk:'Квадрат теңдеулер, логарифмдер, анализ негіздері, ықтималдық'}}
+};
+const LN=l=>LEVELS[l].name[lang];const LD=l=>LEVELS[l].desc[lang];
+
+/* ---------- curriculum ---------- */
+const ex=(body)=>`<div class="ex"><div class="eyebrow">${t('example')}</div>${body}</div>`;
+const NAMES=[{en:'Aru',ru:'Ару',f:1},{en:'Timur',ru:'Тимур',f:0},{en:'Dana',ru:'Дана',f:1},{en:'Arman',ru:'Арман',f:0},{en:'Aigerim',ru:'Айгерим',f:1},{en:'Daniyar',ru:'Данияр',f:0}];
+const nm=o=>lang==='en'?o.en:o.ru;
+function steps(a,b,sign){const h=Math.floor(b/100)*100,tn=Math.floor(b%100/10)*10,o=b%10;let cur=a;const out=[];for(const part of [h,tn,o]){if(!part)continue;cur=sign>0?cur+part:cur-part;out.push(`${sign>0?'+':'−'} ${part} = ${fmt(cur)}`);}return `${fmt(a)} ${out.join(', ')}`;}
+const TOPICS=[
+/* ===== Level 0 (Junior) ===== */
+{id:'addsub',level:0,title:{en:'Adding & subtracting',ru:'Сложение и вычитание',kk:'Қосу және азайту'},blurb:{en:'Big sums made easy by splitting numbers',ru:'Большие примеры легко, если разбить числа',kk:'Сандарды бөлсең, үлкен есептер оңай'},
+lesson:{
+en:()=>`<p>Big sums get easy when you split a number into hundreds, tens and ones.</p><ul><li><b>Adding:</b> 248 + 137 → 248 + 100 = 348, + 30 = 378, + 7 = 385.</li><li><b>Subtracting:</b> 503 − 128 → 503 − 100 = 403, − 20 = 383, − 8 = 375.</li><li><b>Missing number:</b> □ + 47 = 120 → 120 − 47 = 73.</li></ul>${ex('365 + 248 = 365 + 200 + 40 + 8 = <b>613</b>')}<p class="muted small">Check a subtraction by adding back: 375 + 128 = 503 ✓</p>`,
+ru:()=>`<p>Большие примеры становятся лёгкими, если разбить число на сотни, десятки и единицы.</p><ul><li><b>Сложение:</b> 248 + 137 → 248 + 100 = 348, + 30 = 378, + 7 = 385.</li><li><b>Вычитание:</b> 503 − 128 → 503 − 100 = 403, − 20 = 383, − 8 = 375.</li><li><b>Неизвестное число:</b> □ + 47 = 120 → 120 − 47 = 73.</li></ul>${ex('365 + 248 = 365 + 200 + 40 + 8 = <b>613</b>')}<p class="muted small">Вычитание проверяй сложением: 375 + 128 = 503 ✓</p>`,
+kk:()=>`<p>Санды жүздіктерге, ондықтарға және бірліктерге бөлсең, үлкен есептер оңай болады.</p><ul><li><b>Қосу:</b> 248 + 137 → 248 + 100 = 348, + 30 = 378, + 7 = 385.</li><li><b>Азайту:</b> 503 − 128 → 503 − 100 = 403, − 20 = 383, − 8 = 375.</li><li><b>Белгісіз сан:</b> □ + 47 = 120 → 120 − 47 = 73.</li></ul>${ex('365 + 248 = 365 + 200 + 40 + 8 = <b>613</b>')}<p class="muted small">Азайтуды қосу арқылы тексер: 375 + 128 = 503 ✓</p>`},
+gen(){const tt=ri(0,2);
+ if(tt===0){const a=ri(15,499),b=ri(15,499);return{q:`${a} + ${b} = ?`,ans:a+b,explain:`${steps(a,b,1)} → <b>${fmt(a+b)}</b>.`};}
+ if(tt===1){const a=ri(120,999),b=ri(11,a-10);return{q:`${a} − ${b} = ?`,ans:a-b,explain:`${steps(a,b,-1)} → <b>${fmt(a-b)}</b>.`};}
+ const b=ri(12,89),c=b+ri(10,200);return{q:`□ + ${b} = ${c}. □ = ?`,ans:c-b,explain:`□ = ${c} − ${b} = <b>${c-b}</b>.`};}
+},
+{id:'times',level:0,title:{en:'Times tables & division',ru:'Таблица умножения и деление',kk:'Көбейту кестесі және бөлу'},blurb:{en:'Multiplication facts and their reverse',ru:'Умножение и обратное ему деление',kk:'Көбейту және оған кері бөлу'},
+lesson:{
+en:()=>`<ul><li><b>Multiplication is repeated adding:</b> 4 × 6 = 6 + 6 + 6 + 6 = 24.</li><li><b>One more group:</b> if you know 7 × 7 = 49, then 7 × 8 = 49 + 7 = 56.</li><li><b>Division is the reverse:</b> 56 ÷ 8 = 7 because 7 × 8 = 56.</li><li><b>× 10 and × 100:</b> add one or two zeros. 34 × 10 = 340.</li></ul>${ex('9 × 6 = 10 × 6 − 6 = 60 − 6 = <b>54</b>')}`,
+ru:()=>`<ul><li><b>Умножение — это сложение одинаковых чисел:</b> 4 × 6 = 6 + 6 + 6 + 6 = 24.</li><li><b>Ещё одна группа:</b> если 7 × 7 = 49, то 7 × 8 = 49 + 7 = 56.</li><li><b>Деление — обратное действие:</b> 56 ÷ 8 = 7, потому что 7 × 8 = 56.</li><li><b>× 10 и × 100:</b> допиши один или два нуля. 34 × 10 = 340.</li></ul>${ex('9 × 6 = 10 × 6 − 6 = 60 − 6 = <b>54</b>')}`,
+kk:()=>`<ul><li><b>Көбейту — бірдей сандарды қосу:</b> 4 × 6 = 6 + 6 + 6 + 6 = 24.</li><li><b>Тағы бір топ:</b> 7 × 7 = 49 болса, 7 × 8 = 49 + 7 = 56.</li><li><b>Бөлу — кері амал:</b> 56 ÷ 8 = 7, себебі 7 × 8 = 56.</li><li><b>× 10 және × 100:</b> бір не екі нөл жаз. 34 × 10 = 340.</li></ul>${ex('9 × 6 = 10 × 6 − 6 = 60 − 6 = <b>54</b>')}`},
+gen(){const tt=ri(0,2);const a=ri(2,10),b=ri(2,10);
+ if(tt===0)return{q:`${a} × ${b} = ?`,ans:a*b,explain:`${a} × ${b-1} = ${a*(b-1)}; + ${a} = <b>${a*b}</b>.`};
+ if(tt===1)return{q:`${a*b} ÷ ${a} = ?`,ans:b,explain:`${a} × ${b} = ${a*b} → ${a*b} ÷ ${a} = <b>${b}</b>.`};
+ const n=ri(3,99),z=pick([10,100]);return{q:`${n} × ${z} = ?`,ans:n*z,explain:X(`Add ${z===10?'one zero':'two zeros'}`,`Допиши ${z===10?'один ноль':'два нуля'}`,`${z===10?'Бір':'Екі'} нөл жаз`)+`: <b>${fmt(n*z)}</b>.`};}
+},
+{id:'wordprob',level:0,title:{en:'Word problems',ru:'Текстовые задачи',kk:'Мәтінді есептер'},blurb:{en:'Shopping, sharing and comparing',ru:'Покупки, деление поровну и сравнение',kk:'Сатып алу, бөлу және салыстыру'},
+lesson:{
+en:()=>`<ul><li><b>Read twice.</b> What do we know, and what is the question?</li><li><b>Pick the operation:</b> "in total" → add or multiply; "left / change / how many more" → subtract; "share equally" → divide.</li><li><b>Check:</b> does the answer make sense?</li></ul>${ex('You have 1,000 ₸ and buy 3 pens at 150 ₸ each. Pens: 3 × 150 = 450 ₸. Change: 1,000 − 450 = <b>550 ₸</b>.')}`,
+ru:()=>`<ul><li><b>Прочитай дважды.</b> Что известно и что нужно найти?</li><li><b>Выбери действие:</b> «всего» → сложение или умножение; «осталось / сдача / на сколько больше» → вычитание; «поровну» → деление.</li><li><b>Проверь:</b> ответ похож на правду?</li></ul>${ex('У тебя 1 000 ₸, ты покупаешь 3 ручки по 150 ₸. Ручки: 3 × 150 = 450 ₸. Сдача: 1 000 − 450 = <b>550 ₸</b>.')}`,
+kk:()=>`<ul><li><b>Екі рет оқы.</b> Не белгілі және не табу керек?</li><li><b>Амалды таңда:</b> «барлығы» → қосу не көбейту; «қалды / қайтарым / қаншаға көп» → азайту; «бірдей бөлу» → бөлу.</li><li><b>Тексер:</b> жауап шындыққа ұқсай ма?</li></ul>${ex('Сенде 1 000 ₸ бар, 150 ₸-ден 3 қалам сатып аласың. Қаламдар: 3 × 150 = 450 ₸. Қайтарым: 1 000 − 450 = <b>550 ₸</b>.')}`},
+gen(){const tt=ri(0,3);
+ if(tt===0){const it=pick([{en:['pen','pens'],ru:['ручку','ручки','ручек'],kk:'қалам'},{en:['notebook','notebooks'],ru:['тетрадь','тетради','тетрадей'],kk:'дәптер'},{en:['ice cream','ice creams'],ru:['мороженое','мороженых','мороженых'],kk:'балмұздақ'}]);
+  const M=pick([500,1000,2000]),n=ri(2,5);let p=ri(5,30)*10;while(n*p>=M)p-=10;
+  return{q:X(`You have ${tg(M)}. You buy ${n} ${it.en[1]} at ${tg(p)} each. How much change do you get?`,`У тебя ${tg(M)}. Ты покупаешь ${n} ${ruP(n,it.ru)} по ${tg(p)}. Сколько сдачи ты получишь?`,`Сенде ${tg(M)} бар. Әрқайсысы ${tg(p)} тұратын ${n} ${it.kk} сатып аласың. Қанша қайтарым аласың?`),ans:M-n*p,unit:'₸',show:tg(M-n*p),
+  explain:`${n} × ${fmt(p)} = ${fmt(n*p)}; ${fmt(M)} − ${fmt(n*p)} = <b>${tg(M-n*p)}</b>.`};}
+ if(tt===1){const k=ri(2,6),q=ri(3,12),N=k*q;return{q:X(`${N} sweets are shared equally among ${k} friends. How many does each friend get?`,`${N} ${ruP(N,['конфету','конфеты','конфет'])} поровну делят между ${k} друзьями. Сколько получит каждый?`,`${N} кәмпитті ${k} досқа бірдей бөлді. Әр досқа нешеден тиеді?`),ans:q,explain:`${N} ÷ ${k} = <b>${q}</b>.`};}
+ if(tt===2){const k=ri(3,9),m=ri(4,12);return{q:X(`There are ${k} boxes with ${m} pencils in each. How many pencils are there in total?`,`В каждой коробке ${m} ${ruP(m,['карандаш','карандаша','карандашей'])}. Коробок: ${k}. Сколько всего карандашей?`,`Әр қорапта ${m} қарындаш бар. Қорап саны — ${k}. Барлығы неше қарындаш?`),ans:k*m,explain:`${k} × ${m} = <b>${k*m}</b>.`};}
+ const i=ri(0,NAMES.length-1);let j=ri(0,NAMES.length-1);if(j===i)j=(i+1)%NAMES.length;const A=NAMES[i],Bn=NAMES[j];const x=ri(12,60),y=ri(5,30);
+ return{q:X(`${A.en} has ${x} stickers. ${Bn.en} has ${y} more. How many stickers does ${Bn.en} have?`,`${A.ru} собрал${A.f?'а':''} ${x} ${ruP(x,['наклейку','наклейки','наклеек'])}, а ${Bn.ru} — на ${y} больше. Сколько наклеек собрал${Bn.f?'а':''} ${Bn.ru}?`,`${A.ru} ${x} стикер жинады, ал ${Bn.ru} одан ${y} стикер артық жинады. ${Bn.ru} неше стикер жинады?`),ans:x+y,
+  explain:X('"More" → add','«Больше» → складываем','«Артық» → қосамыз')+`: ${x} + ${y} = <b>${x+y}</b>.`};}
+},
+{id:'shapes',level:0,title:{en:'Shapes & measures',ru:'Фигуры и величины',kk:'Фигуралар мен шамалар'},blurb:{en:'Perimeter, area, time and length',ru:'Периметр, площадь, время и длина',kk:'Периметр, аудан, уақыт және ұзындық'},
+lesson:{
+en:()=>`<ul><li><b>Perimeter</b> = distance around. Rectangle: 2 × (length + width).</li><li><b>Area</b> = space inside. Rectangle: length × width, in cm².</li><li><b>Time:</b> 1 hour = 60 minutes.</li><li><b>Length:</b> 1 m = 100 cm.</li></ul>${ex('A 6 cm × 4 cm rectangle: perimeter 2 × (6 + 4) = <b>20 cm</b>, area 6 × 4 = <b>24 cm²</b>.')}`,
+ru:()=>`<ul><li><b>Периметр</b> — длина границы. Прямоугольник: 2 × (длина + ширина).</li><li><b>Площадь</b> — место внутри. Прямоугольник: длина × ширина, в см².</li><li><b>Время:</b> 1 час = 60 минут.</li><li><b>Длина:</b> 1 м = 100 см.</li></ul>${ex('Прямоугольник 6 см × 4 см: периметр 2 × (6 + 4) = <b>20 см</b>, площадь 6 × 4 = <b>24 см²</b>.')}`,
+kk:()=>`<ul><li><b>Периметр</b> — шекараның ұзындығы. Тіктөртбұрыш: 2 × (ұзындығы + ені).</li><li><b>Аудан</b> — ішіндегі орын. Тіктөртбұрыш: ұзындығы × ені, см²-мен.</li><li><b>Уақыт:</b> 1 сағат = 60 минут.</li><li><b>Ұзындық:</b> 1 м = 100 см.</li></ul>${ex('6 см × 4 см тіктөртбұрыш: периметрі 2 × (6 + 4) = <b>20 см</b>, ауданы 6 × 4 = <b>24 см²</b>.')}`},
+gen(){const tt=ri(0,3);const cm=X('cm','см','см');
+ if(tt<2){const a=ri(3,20),b=ri(2,a);const per=tt===0;
+  const q=X(`A rectangle is ${a} cm long and ${b} cm wide. What is its ${per?'perimeter':'area'}?`,`Длина прямоугольника ${a} см, ширина ${b} см. Найди ${per?'периметр':'площадь'}.`,`Тіктөртбұрыштың ұзындығы ${a} см, ені ${b} см. ${per?'Периметрін':'Ауданын'} тап.`);
+  return per?{q,ans:2*(a+b),unit:cm,explain:`2 × (${a} + ${b}) = <b>${2*(a+b)} ${cm}</b>.`}:{q,ans:a*b,unit:cm+'²',explain:`${a} × ${b} = <b>${a*b} ${cm}²</b>.`};}
+ if(tt===2){const h=ri(1,5),m=ri(5,55);const H=X('h','ч','сағ'),Mi=X('min','мин','мин');return{q:`${h} ${H} ${m} ${Mi} = ? ${Mi}`,ans:h*60+m,unit:Mi,explain:`${h} × 60 + ${m} = <b>${h*60+m} ${Mi}</b>.`};}
+ const mm=ri(1,9),c=ri(5,95);const M=X('m','м','м');return{q:`${mm} ${M} ${c} ${cm} = ? ${cm}`,ans:mm*100+c,unit:cm,explain:`${mm} × 100 + ${c} = <b>${mm*100+c} ${cm}</b>.`};}
+},
+/* ===== Level 1 ===== */
+{id:'mental',level:1,title:{en:'Mental arithmetic',ru:'Устный счёт',kk:'Ауызша есептеу'},blurb:{en:'Shortcuts for fast, reliable calculation',ru:'Приёмы для быстрого и надёжного счёта',kk:'Жылдам әрі сенімді есептеу тәсілдері'},
+lesson:{
+en:()=>`<p>Mental math isn't about being a human calculator. It's about rewriting a problem into pieces that are easy to hold in your head.</p>
+<ul><li><b>× 11 (two-digit numbers):</b> multiply by 10, then add the number once more. 47 × 11 = 470 + 47 = 517.</li>
+<li><b>× 25:</b> multiply by 100, then divide by 4. 36 × 25 = 3,600 ÷ 4 = 900.</li>
+<li><b>Near a round number:</b> use the round number and correct. 98 × 7 = 100 × 7 − 2 × 7 = 686.</li>
+<li><b>1,000 − x:</b> take each digit from 9 and the last one from 10. 1,000 − 347 → 6, 5, 3 → 653.</li></ul>
+${ex('199 × 6 = 200 × 6 − 1 × 6 = 1,200 − 6 = <b>1,194</b>')}<p class="muted small">Habit to build: before calculating, ask "is there a round number nearby?"</p>`,
+ru:()=>`<p>Устный счёт — не про то, чтобы быть калькулятором. Это умение разбить задачу на части, которые легко держать в голове.</p>
+<ul><li><b>× 11 (двузначные числа):</b> умножьте на 10 и прибавьте само число. 47 × 11 = 470 + 47 = 517.</li>
+<li><b>× 25:</b> умножьте на 100 и разделите на 4. 36 × 25 = 3 600 ÷ 4 = 900.</li>
+<li><b>Рядом с круглым числом:</b> возьмите круглое число и сделайте поправку. 98 × 7 = 100 × 7 − 2 × 7 = 686.</li>
+<li><b>1 000 − x:</b> каждую цифру вычтите из 9, последнюю — из 10. 1 000 − 347 → 6, 5, 3 → 653.</li></ul>
+${ex('199 × 6 = 200 × 6 − 1 × 6 = 1 200 − 6 = <b>1 194</b>')}<p class="muted small">Полезная привычка: перед расчётом спросите себя — «нет ли рядом круглого числа?»</p>`,
+kk:()=>`<p>Ауызша есептеу — калькулятор болу емес. Бұл есепті ойда оңай ұстауға болатын бөліктерге бөлу шеберлігі.</p>
+<ul><li><b>× 11 (екі таңбалы сандар):</b> 10-ға көбейтіп, санның өзін қосыңыз. 47 × 11 = 470 + 47 = 517.</li>
+<li><b>× 25:</b> 100-ге көбейтіп, 4-ке бөліңіз. 36 × 25 = 3 600 ÷ 4 = 900.</li>
+<li><b>Дөңгелек санға жақын:</b> дөңгелек санды алып, түзету жасаңыз. 98 × 7 = 100 × 7 − 2 × 7 = 686.</li>
+<li><b>1 000 − x:</b> әр цифрды 9-дан, соңғысын 10-нан азайтыңыз. 1 000 − 347 → 6, 5, 3 → 653.</li></ul>
+${ex('199 × 6 = 200 × 6 − 1 × 6 = 1 200 − 6 = <b>1 194</b>')}<p class="muted small">Пайдалы әдет: есептер алдында «жақын жерде дөңгелек сан бар ма?» деп сұраңыз.</p>`},
+gen(){const tt=ri(0,3);
+ if(tt===0){const a=ri(12,89);return{q:`${a} × 11 = ?`,ans:a*11,explain:X('× 11 = × 10 + the number','× 11 = × 10 + само число','× 11 = × 10 + санның өзі')+`: ${fmt(a*10)} + ${a} = <b>${fmt(a*11)}</b>.`};}
+ if(tt===1){const a=ri(4,48);return{q:`${a} × 25 = ?`,ans:a*25,explain:X('× 25 = × 100, then ÷ 4','× 25 = × 100, затем ÷ 4','× 25 = × 100, содан кейін ÷ 4')+`: ${fmt(a*100)} ÷ 4 = <b>${fmt(a*25)}</b>.`};}
+ if(tt===2){const [n,base,d]=pick([[98,100,-2],[99,100,-1],[49,50,-1],[199,200,-1],[101,100,1],[51,50,1],[48,50,-2],[102,100,2]]);const b=ri(3,19);
+  return{q:`${n} × ${b} = ?`,ans:n*b,explain:X(`Use ${base}`,`Через ${base}`,`${base} арқылы`)+`: ${base} × ${b} ${d<0?'−':'+'} ${Math.abs(d)} × ${b} = ${fmt(base*b)} ${d<0?'−':'+'} ${Math.abs(d*b)} = <b>${fmt(n*b)}</b>.`};}
+ let x=ri(101,899);if(x%10===0)x+=3;
+ return{q:`${fmt(1000)} − ${x} = ?`,ans:1000-x,explain:X('Each digit from 9, the last from 10','Каждую цифру из 9, последнюю из 10','Әр цифрды 9-дан, соңғысын 10-нан')+`: ${String(x).split('').map((c,i)=>(i<2?9:10)+' − '+c).join('; ')} → <b>${1000-x}</b>.`};}
+},
+{id:'percent',level:1,title:{en:'Percentages',ru:'Проценты',kk:'Пайыздар'},blurb:{en:'Percent of a number, and what percent one number is of another',ru:'Процент от числа и сколько процентов одно число составляет от другого',kk:'Саннан пайыз табу және бір сан екіншісінің неше пайызы екенін анықтау'},
+lesson:{
+en:()=>`<p>"Percent" means "per hundred". The fastest route is almost always to start from <b>10%</b> and build.</p>
+<ul><li><b>10%</b> = divide by 10. 10% of 2,400 = 240.</li><li><b>5%</b> = half of 10%. <b>15%</b> = 10% + 5%. <b>20%</b> = 10% × 2.</li>
+<li><b>1%</b> = ÷ 100. <b>25%</b> = ÷ 4. <b>50%</b> = ÷ 2. <b>12.5%</b> = ÷ 8.</li><li><b>"A is what % of B?"</b> → A ÷ B × 100.</li></ul>
+${ex('15% of 2,400: 10% = 240, 5% = 120, so 15% = <b>360</b>.<br>300 is what % of 2,400? 300 ÷ 2,400 × 100 = <b>12.5%</b>.')}`,
+ru:()=>`<p>«Процент» — это «сотая часть». Быстрее всего почти всегда начинать с <b>10%</b> и достраивать.</p>
+<ul><li><b>10%</b> = разделить на 10. 10% от 2 400 = 240.</li><li><b>5%</b> = половина от 10%. <b>15%</b> = 10% + 5%. <b>20%</b> = 10% × 2.</li>
+<li><b>1%</b> = ÷ 100. <b>25%</b> = ÷ 4. <b>50%</b> = ÷ 2. <b>12,5%</b> = ÷ 8.</li><li><b>«Сколько % A составляет от B?»</b> → A ÷ B × 100.</li></ul>
+${ex('15% от 2 400: 10% = 240, 5% = 120, значит 15% = <b>360</b>.<br>Сколько % составляет 300 от 2 400? 300 ÷ 2 400 × 100 = <b>12,5%</b>.')}`,
+kk:()=>`<p>«Пайыз» — «жүзден бір бөлік» деген сөз. Ең жылдам жол — <b>10%</b>-дан бастап құрастыру.</p>
+<ul><li><b>10%</b> = 10-ға бөлу. 2 400-дің 10%-ы = 240.</li><li><b>5%</b> = 10%-дың жартысы. <b>15%</b> = 10% + 5%. <b>20%</b> = 10% × 2.</li>
+<li><b>1%</b> = ÷ 100. <b>25%</b> = ÷ 4. <b>50%</b> = ÷ 2. <b>12,5%</b> = ÷ 8.</li><li><b>«A саны B-ның неше пайызы?»</b> → A ÷ B × 100.</li></ul>
+${ex('2 400-дің 15%-ы: 10% = 240, 5% = 120, демек 15% = <b>360</b>.<br>300 саны 2 400-дің неше пайызы? 300 ÷ 2 400 × 100 = <b>12,5%</b>.')}`},
+gen(){const n=ri(2,40)*40;const p=pick([10,5,15,20,25,1,2,30,50,75,12.5]);const ask=R()<0.6;
+ const how={10:X('10% = ÷ 10','10% = ÷ 10','10% = ÷ 10'),5:X(`10% is ${fmt(n/10)}, so 5% is half`,`10% — это ${fmt(n/10)}, значит 5% — половина`,`10% — ${fmt(n/10)}, демек 5% — оның жартысы`),15:`10% (${fmt(n/10)}) + 5% (${fmt(n/20)})`,20:`10% (${fmt(n/10)}) × 2`,25:'25% = ÷ 4',1:'1% = ÷ 100',2:`1% (${fmt(n/100)}) × 2`,30:`10% (${fmt(n/10)}) × 3`,50:X('50% = half','50% = половина','50% = жартысы'),75:X('75% = ÷ 4, then × 3','75% = ÷ 4, затем × 3','75% = ÷ 4, содан кейін × 3'),12.5:`${fmt(12.5)}% = ÷ 8`};
+ const ans=n*p/100;
+ if(ask)return{q:X(`What is ${fmt(p)}% of ${fmt(n)}?`,`Сколько будет ${fmt(p)}% от ${fmt(n)}?`,`${fmt(n)} санының ${fmt(p)}%-ы қанша?`),ans,tol:0.001,explain:`${how[p]} → <b>${fmt(ans)}</b>.`};
+ return{q:X(`${fmt(ans)} is what percent of ${fmt(n)}?`,`Сколько процентов составляет ${fmt(ans)} от ${fmt(n)}?`,`${fmt(ans)} саны ${fmt(n)} санының неше пайызы?`),ans:p,unit:'%',tol:0.01,explain:`${fmt(ans)} ÷ ${fmt(n)} × 100 = <b>${fmt(p)}%</b>.`};}
+},
+{id:'fractions',level:1,title:{en:'Fractions & decimals',ru:'Дроби и десятичные',kk:'Бөлшектер мен ондық бөлшектер'},blurb:{en:'Converting, adding, and taking a fraction of an amount',ru:'Перевод, сложение и дробь от числа',kk:'Түрлендіру, қосу және саннан бөлшек табу'},
+lesson:{
+en:()=>`<ul><li><b>Fraction → decimal:</b> divide top by bottom. Worth knowing by heart: 1/8 = 0.125, 1/5 = 0.2, 1/4 = 0.25, 3/8 = 0.375, 5/8 = 0.625, 3/4 = 0.75.</li>
+<li><b>Adding fractions:</b> use a common denominator, then add the tops. 1/4 + 1/6 → 3/12 + 2/12 = 5/12.</li>
+<li><b>Fraction of an amount:</b> divide by the bottom, multiply by the top. 3/5 of 240 = 240 ÷ 5 × 3 = 144.</li>
+<li><b>Multiplying decimals:</b> ignore the points, multiply, then restore the total number of decimal places. 0.3 × 0.4 → 12 → 0.12.</li></ul>
+${ex('2/3 + 1/4 = 8/12 + 3/12 = <b>11/12</b> ≈ 0.92')}`,
+ru:()=>`<ul><li><b>Дробь → десятичная:</b> разделите числитель на знаменатель. Полезно знать наизусть: 1/8 = 0,125, 1/5 = 0,2, 1/4 = 0,25, 3/8 = 0,375, 5/8 = 0,625, 3/4 = 0,75.</li>
+<li><b>Сложение дробей:</b> приведите к общему знаменателю и сложите числители. 1/4 + 1/6 → 3/12 + 2/12 = 5/12.</li>
+<li><b>Дробь от числа:</b> разделите на знаменатель, умножьте на числитель. 3/5 от 240 = 240 ÷ 5 × 3 = 144.</li>
+<li><b>Умножение десятичных:</b> умножьте без запятых, затем отделите столько знаков, сколько их было в сумме. 0,3 × 0,4 → 12 → 0,12.</li></ul>
+${ex('2/3 + 1/4 = 8/12 + 3/12 = <b>11/12</b> ≈ 0,92')}`,
+kk:()=>`<ul><li><b>Жай бөлшек → ондық:</b> алымын бөліміне бөліңіз. Жатқа білген пайдалы: 1/8 = 0,125, 1/5 = 0,2, 1/4 = 0,25, 3/8 = 0,375, 5/8 = 0,625, 3/4 = 0,75.</li>
+<li><b>Бөлшектерді қосу:</b> ортақ бөлімге келтіріп, алымдарын қосыңыз. 1/4 + 1/6 → 3/12 + 2/12 = 5/12.</li>
+<li><b>Саннан бөлшек табу:</b> бөліміне бөліп, алымына көбейтіңіз. 240-тың 3/5 бөлігі = 240 ÷ 5 × 3 = 144.</li>
+<li><b>Ондық бөлшектерді көбейту:</b> үтірсіз көбейтіп, жалпы үтірден кейінгі таңба санын қайтарыңыз. 0,3 × 0,4 → 12 → 0,12.</li></ul>
+${ex('2/3 + 1/4 = 8/12 + 3/12 = <b>11/12</b> ≈ 0,92')}`},
+gen(){const tt=ri(0,3);
+ if(tt===0){const [a,b]=pick([[1,8],[3,8],[5,8],[7,8],[1,5],[3,5],[3,4],[2,5],[7,20],[3,16],[9,25]]);return{q:X(`Write ${a}/${b} as a decimal.`,`Запишите ${a}/${b} десятичной дробью.`,`${a}/${b} бөлшегін ондық бөлшек түрінде жазыңыз.`),ans:a/b,tol:1e-6,explain:`${a} ÷ ${b} = <b>${fmt(a/b)}</b>.`};}
+ if(tt===1){const b=pick([2,3,4,5,6,8]);let d=pick([3,4,5,6,8,12]);if(d===b)d=12;const a=ri(1,b-1),c=ri(1,d-1);const L=b*d/gcd(b,d);const num=a*L/b+c*L/d;
+  return{q:`${a}/${b} + ${c}/${d} = ?`,hint:t('hint2'),ans:num/L,tol:0.006,show:frac(num,L),explain:X('Common denominator','Общий знаменатель','Ортақ бөлім')+` ${L}: ${a*L/b}/${L} + ${c*L/d}/${L} = ${num}/${L} = <b>${frac(num,L)}</b> ≈ ${fmt(num/L,3)}.`};}
+ if(tt===2){const d=pick([3,4,5,6,8]);const a=ri(1,d-1);const n=d*ri(5,60);return{q:X(`What is ${a}/${d} of ${fmt(n)}?`,`Сколько составляет ${a}/${d} от ${fmt(n)}?`,`${fmt(n)} санының ${a}/${d} бөлігі қанша?`),ans:n*a/d,explain:`${fmt(n)} ÷ ${d} = ${fmt(n/d)}; × ${a} = <b>${fmt(n*a/d)}</b>.`};}
+ const a=ri(2,9),b=ri(2,9);return{q:`${fmt(a/10)} × ${fmt(b/10)} = ?`,ans:a*b/100,tol:1e-6,explain:`${a} × ${b} = ${a*b}; `+X('two decimal places in total','всего два знака после запятой','үтірден кейін барлығы екі таңба')+` → <b>${fmt(a*b/100)}</b>.`};}
+},
+{id:'order',level:1,title:{en:'Order of operations',ru:'Порядок действий',kk:'Амалдар реті'},blurb:{en:'Brackets, powers, × ÷, then + −',ru:'Скобки, степени, × ÷, затем + −',kk:'Жақшалар, дәрежелер, × ÷, содан кейін + −'},
+lesson:{
+en:()=>`<p>When an expression mixes operations, work in this order:</p><ul><li><b>1. Brackets</b> first.</li><li><b>2. Powers</b> (squares, roots).</li><li><b>3. × and ÷</b>, left to right.</li><li><b>4. + and −</b>, left to right.</li></ul>
+${ex('8 + 6 × 3 − 4 → 6 × 3 = 18 first → 8 + 18 − 4 = <b>22</b><br>The classic trap: 12 − 8 ÷ 4 is 12 − 2 = <b>10</b>, not 1.')}<p class="muted small">This matters in Excel too: =A1+B1*C1 multiplies first. Use brackets when in doubt.</p>`,
+ru:()=>`<p>Если в выражении разные действия, выполняйте их в таком порядке:</p><ul><li><b>1. Скобки</b>.</li><li><b>2. Степени</b> (квадраты, корни).</li><li><b>3. × и ÷</b> слева направо.</li><li><b>4. + и −</b> слева направо.</li></ul>
+${ex('8 + 6 × 3 − 4 → сначала 6 × 3 = 18 → 8 + 18 − 4 = <b>22</b><br>Классическая ловушка: 12 − 8 ÷ 4 = 12 − 2 = <b>10</b>, а не 1.')}<p class="muted small">В Excel то же самое: =A1+B1*C1 сначала умножает. Сомневаетесь — ставьте скобки.</p>`,
+kk:()=>`<p>Өрнекте әртүрлі амалдар болса, оларды мына ретпен орындаңыз:</p><ul><li><b>1. Жақшалар</b>.</li><li><b>2. Дәрежелер</b> (квадраттар, түбірлер).</li><li><b>3. × және ÷</b>, солдан оңға.</li><li><b>4. + және −</b>, солдан оңға.</li></ul>
+${ex('8 + 6 × 3 − 4 → алдымен 6 × 3 = 18 → 8 + 18 − 4 = <b>22</b><br>Классикалық қақпан: 12 − 8 ÷ 4 = 12 − 2 = <b>10</b>, 1 емес.')}<p class="muted small">Excel-де де солай: =A1+B1*C1 алдымен көбейтеді. Күмәндансаңыз, жақша қойыңыз.</p>`},
+gen(){const tt=ri(0,3);const mf=X('Multiply first','Сначала умножение','Алдымен көбейту'),lr=X('Then left to right','Затем слева направо','Содан кейін солдан оңға');
+ if(tt===0){const a=ri(2,20),b=ri(2,9),c=ri(2,9),d=ri(1,15);const ans=a+b*c-d;return{q:`${a} + ${b} × ${c} − ${d} = ?`,ans,explain:`${mf}: ${b} × ${c} = ${b*c}. ${lr}: ${a} + ${b*c} − ${d} = <b>${N(ans)}</b>.`};}
+ if(tt===1){const a=ri(2,9),b=ri(2,9),c=ri(2,6),d=ri(1,20);const ans=(a+b)*c-d;return{q:`(${a} + ${b}) × ${c} − ${d} = ?`,ans,explain:X('Brackets','Скобки','Жақша')+`: ${a+b}. × ${c} = ${(a+b)*c}. − ${d} = <b>${N(ans)}</b>.`};}
+ if(tt===2){const c=ri(2,6),b=c*ri(2,9),a=ri(10,40),d=ri(1,9);const ans=a-b/c+d;return{q:`${a} − ${b} ÷ ${c} + ${d} = ?`,ans,explain:X('Divide first','Сначала деление','Алдымен бөлу')+`: ${b} ÷ ${c} = ${b/c}. ${lr}: ${a} − ${b/c} + ${d} = <b>${N(ans)}</b>.`};}
+ const a=ri(3,12),b=ri(2,9),c=ri(2,9);const ans=a*a-b*c;return{q:`${a}² − ${b} × ${c} = ?`,ans,explain:X('Power first','Сначала степень','Алдымен дәреже')+`: ${a}² = ${a*a}. ${b} × ${c} = ${b*c}. ${a*a} − ${b*c} = <b>${N(ans)}</b>.`};}
+},
+/* ===== Level 2 ===== */
+{id:'linear',level:2,title:{en:'Linear equations',ru:'Линейные уравнения',kk:'Сызықтық теңдеулер'},blurb:{en:'Solve for x by undoing operations',ru:'Находим x, отменяя действия',kk:'Амалдарды кері орындап, x-ті табу'},
+lesson:{
+en:()=>`<p>An equation is a balance: whatever you do to one side, do to the other. To isolate x, undo operations in reverse order.</p>
+<ul><li><b>ax + b = c:</b> subtract b, then divide by a.</li><li><b>a(x + b) = c:</b> divide by a, then subtract b.</li><li><b>x on both sides:</b> move x terms to one side, numbers to the other.</li></ul>
+${ex('4x − 7 = 21 → 4x = 28 → x = <b>7</b><br>5x + 3 = 2x + 18 → 3x = 15 → x = <b>5</b>')}<p class="muted small">Check by substituting back: 4 × 7 − 7 = 21 ✓</p>`,
+ru:()=>`<p>Уравнение — это весы: что делаете с одной стороной, делайте и с другой. Чтобы выделить x, отменяйте действия в обратном порядке.</p>
+<ul><li><b>ax + b = c:</b> вычтите b, затем разделите на a.</li><li><b>a(x + b) = c:</b> разделите на a, затем вычтите b.</li><li><b>x с обеих сторон:</b> перенесите x в одну сторону, числа — в другую.</li></ul>
+${ex('4x − 7 = 21 → 4x = 28 → x = <b>7</b><br>5x + 3 = 2x + 18 → 3x = 15 → x = <b>5</b>')}<p class="muted small">Проверка подстановкой: 4 × 7 − 7 = 21 ✓</p>`,
+kk:()=>`<p>Теңдеу — таразы: бір жағына не істесеңіз, екінші жағына да соны істеңіз. x-ті бөліп алу үшін амалдарды кері ретпен орындаңыз.</p>
+<ul><li><b>ax + b = c:</b> b-ны азайтып, a-ға бөліңіз.</li><li><b>a(x + b) = c:</b> a-ға бөліп, b-ны азайтыңыз.</li><li><b>x екі жақта:</b> x-терді бір жаққа, сандарды екінші жаққа шығарыңыз.</li></ul>
+${ex('4x − 7 = 21 → 4x = 28 → x = <b>7</b><br>5x + 3 = 2x + 18 → 3x = 15 → x = <b>5</b>')}<p class="muted small">Орнына қойып тексеріңіз: 4 × 7 − 7 = 21 ✓</p>`},
+gen(){let x=ri(-6,12);if(x===0)x=5;const tt=ri(0,2);const sv=X('Solve for x','Найдите x','x-ті табыңыз');
+ if(tt===0){const a=ri(2,9);let b=ri(-20,20);if(!b)b=7;const c=a*x+b;return{q:`${sv}: ${poly([a,b],['x',''])} = ${N(c)}`,ans:x,explain:`${b<0?X('Add','Прибавим','Қосамыз'):X('Subtract','Вычтем','Азайтамыз')} ${Math.abs(b)}: ${a}x = ${N(c-b)}. ÷ ${a}: x = <b>${N(x)}</b>.`};}
+ if(tt===1){const a=ri(2,8),b=ri(1,9),c=a*(x+b);return{q:`${sv}: ${a}(x + ${b}) = ${N(c)}`,ans:x,explain:`÷ ${a}: x + ${b} = ${N(x+b)}. − ${b}: x = <b>${N(x)}</b>.`};}
+ const a=ri(3,9),c=ri(1,a-1),b=ri(-10,10),d=(a-c)*x+b;
+ return{q:`${sv}: ${poly([a,b],['x',''])} = ${poly([c,d],['x',''])}`,ans:x,explain:X(`Subtract ${c===1?'':c}x from both sides`,`Вычтем ${c===1?'':c}x из обеих частей`,`Екі жағынан ${c===1?'':c}x азайтамыз`)+`: ${poly([a-c,b],['x',''])} = ${N(d)}. → ${a-c===1?'':a-c}x = ${N(d-b)}. x = <b>${N(x)}</b>.`};}
+},
+{id:'expand',level:2,title:{en:'Expressions & expanding',ru:'Выражения и раскрытие скобок',kk:'Өрнектер және жақша ашу'},blurb:{en:'Substituting values, expanding brackets, simplifying',ru:'Подстановка, раскрытие скобок, упрощение',kk:'Мәнді қою, жақша ашу, ықшамдау'},
+lesson:{
+en:()=>`<ul><li><b>Substituting:</b> put negative values in brackets. For x = −3: 2x² = 2 × (−3)² = 18.</li>
+<li><b>Double brackets:</b> (x + a)(x + b) = x² + (a + b)x + ab. So (x + 3)(x − 7) = x² − 4x − 21.</li>
+<li><b>A minus in front of a bracket flips every sign inside:</b> −2(x − 5) = −2x + 10.</li>
+<li><b>Simplifying:</b> collect like terms. 3(2x + 4) − 2(x − 5) = 4x + 22.</li></ul>${ex('x² − 4x + 1 at x = −2: (−2)² − 4(−2) + 1 = 4 + 8 + 1 = <b>13</b>')}`,
+ru:()=>`<ul><li><b>Подстановка:</b> отрицательные значения берите в скобки. При x = −3: 2x² = 2 × (−3)² = 18.</li>
+<li><b>Две скобки:</b> (x + a)(x + b) = x² + (a + b)x + ab. Например, (x + 3)(x − 7) = x² − 4x − 21.</li>
+<li><b>Минус перед скобкой меняет все знаки внутри:</b> −2(x − 5) = −2x + 10.</li>
+<li><b>Упрощение:</b> приведите подобные. 3(2x + 4) − 2(x − 5) = 4x + 22.</li></ul>${ex('x² − 4x + 1 при x = −2: (−2)² − 4(−2) + 1 = 4 + 8 + 1 = <b>13</b>')}`,
+kk:()=>`<ul><li><b>Мәнді қою:</b> теріс мәндерді жақшаға алыңыз. x = −3 болса: 2x² = 2 × (−3)² = 18.</li>
+<li><b>Екі жақша:</b> (x + a)(x + b) = x² + (a + b)x + ab. Мысалы, (x + 3)(x − 7) = x² − 4x − 21.</li>
+<li><b>Жақша алдындағы минус ішіндегі барлық таңбаны ауыстырады:</b> −2(x − 5) = −2x + 10.</li>
+<li><b>Ықшамдау:</b> ұқсас мүшелерді біріктіріңіз. 3(2x + 4) − 2(x − 5) = 4x + 22.</li></ul>${ex('x = −2 болғанда x² − 4x + 1: (−2)² − 4(−2) + 1 = 4 + 8 + 1 = <b>13</b>')}`},
+gen(){const tt=ri(0,2);
+ if(tt===0){const a=ri(1,4),b=ri(1,6)*pick([1,-1]),c=ri(1,9)*pick([1,-1]),k=ri(-3,5);const ans=a*k*k+b*k+c;const e=poly([a,b,c],['x²','x','']);
+  return{q:X(`Evaluate ${e} when x = ${N(k)}`,`Найдите значение ${e} при x = ${N(k)}`,`x = ${N(k)} болғанда ${e} өрнегінің мәнін табыңыз`),ans,explain:`${a===1?'':a+' × '}${P(k)}² ${b<0?'−':'+'} ${Math.abs(b)} × ${P(k)} ${c<0?'−':'+'} ${Math.abs(c)} = ${N(a*k*k)} ${b*k<0?'−':'+'} ${Math.abs(b*k)} ${c<0?'−':'+'} ${Math.abs(c)} = <b>${N(ans)}</b>.`};}
+ if(tt===1){const p=ri(-9,9)||2,q=ri(-9,9)||-3;const askC=R()<0.5;const ans=askC?p*q:p+q;const br=`(${poly([1,p],['x',''])})(${poly([1,q],['x',''])})`;
+  return{q:X(`Expand ${br}. What is the ${askC?'constant term':'coefficient of x'}?`,`Раскройте скобки ${br}. Чему равен ${askC?'свободный член':'коэффициент при x'}?`,`${br} жақшаларын ашыңыз. ${askC?'Бос мүше':'x-тің коэффициенті'} неге тең?`),ans,explain:`(x + a)(x + b) = x² + (a + b)x + ab → ${poly([1,p+q,p*q],['x²','x',''])}. → <b>${N(ans)}</b>.`};}
+ const a=ri(2,5),b=ri(1,4),c=ri(1,9)*pick([1,-1]),d=ri(2,4),e=ri(1,3),f=ri(1,9)*pick([1,-1]);const cx=a*b-d*e,k=a*c-d*f;const askX=R()<0.5;const ex2=`${a}(${poly([b,c],['x',''])}) − ${d}(${poly([e,f],['x',''])})`;
+ return{q:X(`Simplify ${ex2} into the form ax + b. What is ${askX?'a, the coefficient of x':'b, the constant'}?`,`Упростите ${ex2} до вида ax + b. Чему равно ${askX?'a (коэффициент при x)':'b (свободный член)'}?`,`${ex2} өрнегін ax + b түріне келтіріңіз. ${askX?'a (x-тің коэффициенті)':'b (бос мүше)'} неге тең?`),ans:askX?cx:k,
+  explain:`${a}(…) = ${poly([a*b,a*c],['x',''])}; −${d}(…) = ${poly([-d*e,-d*f],['x',''])}. → ${poly([cx,k],['x',''])}. → <b>${N(askX?cx:k)}</b>.`};}
+},
+{id:'systems',level:2,title:{en:'Simultaneous equations',ru:'Системы уравнений',kk:'Теңдеулер жүйесі'},blurb:{en:'Two equations, two unknowns',ru:'Два уравнения, две неизвестных',kk:'Екі теңдеу, екі белгісіз'},
+lesson:{
+en:()=>`<p>With two unknowns you need two equations. The cleanest method is <b>elimination</b>: combine the equations so one letter disappears.</p>
+<ul><li>If the y terms have opposite signs and equal size, <b>add</b> the equations. Same sign: <b>subtract</b>.</li><li>If the sizes don't match, <b>multiply</b> one or both equations first.</li><li>Solve for the remaining letter, then substitute back.</li></ul>
+${ex('x + y = 10 and x − y = 4. Add: 2x = 14 → x = 7, then y = 10 − 7 = <b>3</b>.')}<p class="muted small">Business version: "10 units of A and 4 of B cost $820; 3 of A and 4 of B cost $400" is exactly this.</p>`,
+ru:()=>`<p>Для двух неизвестных нужны два уравнения. Самый удобный метод — <b>сложение (исключение)</b>: комбинируем уравнения так, чтобы одна буква исчезла.</p>
+<ul><li>Если у y противоположные знаки и одинаковый коэффициент — <b>сложите</b> уравнения. Знаки одинаковые — <b>вычтите</b>.</li><li>Коэффициенты разные — сначала <b>умножьте</b> одно или оба уравнения.</li><li>Найдите оставшуюся букву и подставьте обратно.</li></ul>
+${ex('x + y = 10 и x − y = 4. Складываем: 2x = 14 → x = 7, тогда y = 10 − 7 = <b>3</b>.')}<p class="muted small">В бизнесе: «10 шт. A и 4 шт. B стоят $820; 3 шт. A и 4 шт. B — $400» — это ровно такая система.</p>`,
+kk:()=>`<p>Екі белгісіз үшін екі теңдеу керек. Ең ыңғайлы әдіс — <b>қосу (жою) әдісі</b>: теңдеулерді бір әріп жойылатындай біріктіреміз.</p>
+<ul><li>y мүшелерінің таңбалары қарама-қарсы, ал шамасы бірдей болса — теңдеулерді <b>қосыңыз</b>. Таңбалары бірдей болса — <b>азайтыңыз</b>.</li><li>Коэффициенттер сәйкес келмесе, алдымен бір не екі теңдеуді <b>көбейтіңіз</b>.</li><li>Қалған әріпті тауып, орнына қойыңыз.</li></ul>
+${ex('x + y = 10 және x − y = 4. Қосамыз: 2x = 14 → x = 7, сонда y = 10 − 7 = <b>3</b>.')}<p class="muted small">Бизнесте: «A-ның 10 данасы мен B-ның 4 данасы $820; A-ның 3 данасы мен B-ның 4 данасы $400» — дәл осындай жүйе.</p>`},
+gen(){const x=ri(-4,9),y=ri(-4,9);const askX=R()<.5;const fnd=X('Find','Найдите','Табыңыз:');const v=askX?'x':'y';const q2=lang==='kk'?`${fnd} ${v}.`:`${fnd} ${v}.`;
+ if(R()<0.4){const s=x+y,d=x-y;return{q:`x + y = ${N(s)}<br>x − y = ${N(d)}<br>${q2}`,ans:askX?x:y,explain:X('Add the equations','Сложим уравнения','Теңдеулерді қосамыз')+`: 2x = ${N(s+d)} → x = ${N(x)}. y = ${N(s)} − ${P(x)} = ${N(y)}. → <b>${N(askX?x:y)}</b>.`};}
+ let a1,b1,a2,b2;do{a1=ri(1,5);b1=ri(1,5)*pick([1,-1]);a2=ri(1,5);b2=ri(1,5)*pick([1,-1]);}while(a1*b2-a2*b1===0);
+ const c1=a1*x+b1*y,c2=a2*x+b2*y;
+ return{q:`${poly([a1,b1],['x','y'])} = ${N(c1)}<br>${poly([a2,b2],['x','y'])} = ${N(c2)}<br>${q2}`,ans:askX?x:y,
+  explain:X(`Multiply the first equation by ${P(b2)} and the second by ${P(b1)}, then subtract to remove y`,`Умножим первое уравнение на ${P(b2)}, второе на ${P(b1)} и вычтем, чтобы убрать y`,`Бірінші теңдеуді ${P(b2)}-ге, екіншісін ${P(b1)}-ге көбейтіп, y жойылуы үшін азайтамыз`)+`: ${N(a1*b2-a2*b1)}x = ${N(c1*b2-c2*b1)} → x = ${N(x)}. y = ${N(y)}. → <b>${N(askX?x:y)}</b>.`};}
+},
+{id:'powers',level:2,title:{en:'Powers & roots',ru:'Степени и корни',kk:'Дәрежелер мен түбірлер'},blurb:{en:'Exponent rules, square roots, negative powers',ru:'Свойства степеней, квадратные корни, отрицательные степени',kk:'Дәреже қасиеттері, квадрат түбір, теріс дәрежелер'},
+lesson:{
+en:()=>`<ul><li><b>Multiply, same base → add exponents:</b> a³ × a⁴ = a⁷.</li><li><b>Divide → subtract exponents:</b> a⁸ ÷ a³ = a⁵.</li><li><b>Power of a power → multiply:</b> (a²)⁵ = a¹⁰.</li>
+<li><b>Negative exponent = reciprocal:</b> 2⁻³ = 1/8 = 0.125. And a⁰ = 1.</li><li><b>Square roots:</b> know squares up to 25² = 625. 2¹⁰ = 1,024 is a handy anchor.</li></ul>${ex('2⁵ × 2³ = 2⁸ = <b>256</b>. 10⁻² = <b>0.01</b>.')}`,
+ru:()=>`<ul><li><b>Умножение при одинаковом основании → показатели складываются:</b> a³ × a⁴ = a⁷.</li><li><b>Деление → вычитаются:</b> a⁸ ÷ a³ = a⁵.</li><li><b>Степень степени → перемножаются:</b> (a²)⁵ = a¹⁰.</li>
+<li><b>Отрицательная степень = обратное число:</b> 2⁻³ = 1/8 = 0,125. И a⁰ = 1.</li><li><b>Квадратные корни:</b> знайте квадраты до 25² = 625. 2¹⁰ = 1 024 — удобный ориентир.</li></ul>${ex('2⁵ × 2³ = 2⁸ = <b>256</b>. 10⁻² = <b>0,01</b>.')}`,
+kk:()=>`<ul><li><b>Негіздері бірдей дәрежелерді көбейткенде көрсеткіштер қосылады:</b> a³ × a⁴ = a⁷.</li><li><b>Бөлгенде — азайтылады:</b> a⁸ ÷ a³ = a⁵.</li><li><b>Дәреженің дәрежесі — көбейтіледі:</b> (a²)⁵ = a¹⁰.</li>
+<li><b>Теріс дәреже = кері сан:</b> 2⁻³ = 1/8 = 0,125. Ал a⁰ = 1.</li><li><b>Квадрат түбірлер:</b> 25² = 625-ке дейінгі квадраттарды біліңіз. 2¹⁰ = 1 024 — ыңғайлы бағдар.</li></ul>${ex('2⁵ × 2³ = 2⁸ = <b>256</b>. 10⁻² = <b>0,01</b>.')}`},
+gen(){const tt=ri(0,5);
+ if(tt===0){const a=ri(2,9),b=ri(2,9);return{q:`2<sup>${a}</sup> × 2<sup>${b}</sup> = 2<sup>?</sup>`,ans:a+b,explain:X('Same base, multiplying → add exponents','Одинаковое основание, умножение → складываем показатели','Негіздері бірдей, көбейту → көрсеткіштерді қосамыз')+`: ${a} + ${b} = <b>${a+b}</b>.`};}
+ if(tt===1){const a=ri(2,6),b=ri(2,5);return{q:`(x<sup>${a}</sup>)<sup>${b}</sup> = x<sup>?</sup>`,ans:a*b,explain:X('Power of a power → multiply exponents','Степень степени → перемножаем показатели','Дәреженің дәрежесі → көрсеткіштерді көбейтеміз')+`: ${a} × ${b} = <b>${a*b}</b>.`};}
+ if(tt===2){const b=ri(2,5),e=b===2?ri(5,10):ri(2,4);return{q:`${b}<sup>${e}</sup> = ?`,ans:b**e,explain:`${Array(e).fill(b).join(' × ')} = <b>${fmt(b**e)}</b>.`};}
+ if(tt===3){const a=ri(6,12),b=ri(2,5);return{q:`y<sup>${a}</sup> ÷ y<sup>${b}</sup> = y<sup>?</sup>`,ans:a-b,explain:X('Dividing → subtract exponents','Деление → вычитаем показатели','Бөлу → көрсеткіштерді азайтамыз')+`: ${a} − ${b} = <b>${a-b}</b>.`};}
+ if(tt===4){const n=ri(11,25);return{q:`√${n*n} = ?`,ans:n,explain:`${n} × ${n} = ${n*n} → √${n*n} = <b>${n}</b>.`};}
+ const b=pick([2,4,5,10]),e=ri(1,3);return{q:`${b}<sup>−${e}</sup> = ? `+X('(as a decimal)','(десятичной дробью)','(ондық бөлшекпен)'),ans:b**-e,tol:1e-4,show:fmt(b**-e,6),explain:X('Negative exponent = reciprocal','Отрицательная степень = обратное число','Теріс дәреже = кері сан')+`: 1 ÷ ${b}<sup>${e}</sup> = 1 ÷ ${b**e} = <b>${fmt(b**-e,6)}</b>.`};}
+},
+/* ===== Level 3 ===== */
+{id:'pctchange',level:3,title:{en:'Percent change',ru:'Изменение в процентах',kk:'Пайыздық өзгеріс'},blurb:{en:'Increases, decreases, successive and reverse percentages',ru:'Рост, снижение, последовательные и обратные проценты',kk:'Өсу, кему, тізбекті және кері пайыздар'},
+lesson:{
+en:()=>`<ul><li><b>Percent change</b> = (new − old) ÷ old × 100. Always divide by the <i>starting</i> value.</li>
+<li><b>Successive changes multiply</b>, they don't add. +20% then −20% = 1.2 × 0.8 = 0.96 → <b>−4%</b>, not 0%.</li>
+<li><b>Reverse percentages:</b> to undo an increase, divide by the multiplier. 5,000 after a 25% rise was 5,000 ÷ 1.25 = <b>4,000</b>. Taking 25% off 5,000 (3,750) is wrong.</li></ul>
+${ex('Sales go from 8,000 to 9,200 units: (9,200 − 8,000) ÷ 8,000 = 0.15 → <b>+15%</b>')}`,
+ru:()=>`<ul><li><b>Изменение в %</b> = (новое − старое) ÷ старое × 100. Делим всегда на <i>начальное</i> значение.</li>
+<li><b>Последовательные изменения перемножаются</b>, а не складываются. +20%, затем −20% = 1,2 × 0,8 = 0,96 → <b>−4%</b>, а не 0%.</li>
+<li><b>Обратные проценты:</b> чтобы отменить рост, делите на множитель. 5 000 после роста на 25% — это было 5 000 ÷ 1,25 = <b>4 000</b>. Отнять 25% от 5 000 (3 750) — ошибка.</li></ul>
+${ex('Продажи выросли с 8 000 до 9 200 шт.: (9 200 − 8 000) ÷ 8 000 = 0,15 → <b>+15%</b>')}`,
+kk:()=>`<ul><li><b>Пайыздық өзгеріс</b> = (жаңа − ескі) ÷ ескі × 100. Әрқашан <i>бастапқы</i> мәнге бөлеміз.</li>
+<li><b>Тізбекті өзгерістер көбейтіледі</b>, қосылмайды. +20%, содан кейін −20% = 1,2 × 0,8 = 0,96 → <b>−4%</b>, 0% емес.</li>
+<li><b>Кері пайыз:</b> өсуді болдырмау үшін көбейткішке бөліңіз. 25%-ға өскеннен кейінгі 5 000 бұрын 5 000 ÷ 1,25 = <b>4 000</b> болған. 5 000-нан 25% алу (3 750) — қате.</li></ul>
+${ex('Сатылым 8 000-нан 9 200 данаға өсті: (9 200 − 8 000) ÷ 8 000 = 0,15 → <b>+15%</b>')}`},
+gen(){const tt=ri(0,2);
+ if(tt===0){const A=ri(20,200)*100,p=pick([-30,-25,-20,-15,-12,-10,-8,-5,5,8,10,12,15,20,25,40,50]);const B=A+A*p/100;
+  return{q:X(`A price moves from ${money(A)} to ${money(B)}. What is the percent change?`,`Цена изменилась с ${money(A)} до ${money(B)}. На сколько процентов?`,`Баға ${money(A)}-дан ${money(B)}-ға өзгерді. Неше пайызға?`)+' '+t('decrease'),ans:p,unit:'%',tol:0.05,explain:`(${money(B)} − ${money(A)}) ÷ ${money(A)} × 100 = ${N(B-A)} ÷ ${fmt(A)} × 100 = <b>${N(p)}%</b>.`};}
+ if(tt===1){const x=pick([10,20,25,30,50]),y=pick([10,20,25,30,40]);const f=(1+x/100)*(1-y/100);const net=(f-1)*100;const s=N(Math.round(net*100)/100)+'%';
+  return{q:X(`A price rises ${x}%, then falls ${y}%. What is the overall percent change?`,`Цена выросла на ${x}%, затем снизилась на ${y}%. Каково общее изменение?`,`Баға ${x}%-ға өсіп, содан кейін ${y}%-ға төмендеді. Жалпы өзгеріс қанша?`)+' '+t('decrease'),ans:net,unit:'%',tol:0.05,show:s,
+  explain:X('Multiply the factors','Перемножаем множители','Көбейткіштерді көбейтеміз')+`: ${fmt(1+x/100)} × ${fmt(1-y/100)} = ${fmt(f)} → <b>${s}</b>. `+X(`Not ${x} − ${y} = ${x-y}%.`,`А не ${x} − ${y} = ${x-y}%.`,`${x} − ${y} = ${x-y}% емес.`)};}
+ const p=pick([10,20,25,12,50,8]),A=ri(10,90)*100,B=A+A*p/100;
+ return{q:X(`After a ${p}% increase, a price is ${money(B)}. What was it before the increase?`,`После повышения на ${p}% цена стала ${money(B)}. Какой она была до повышения?`,`${p}%-ға өскеннен кейін баға ${money(B)} болды. Өскенге дейін қанша болған?`),ans:A,tol:0.5,show:money(A),
+  explain:X('Divide by the multiplier','Делим на множитель','Көбейткішке бөлеміз')+`: ${money(B)} ÷ ${fmt(1+p/100)} = <b>${money(A)}</b>. `+X(`(Taking ${p}% off gives ${money(B*(1-p/100))}, the classic trap.)`,`(Если отнять ${p}%, получится ${money(B*(1-p/100))} — классическая ошибка.)`,`(${p}% алып тастасаңыз, ${money(B*(1-p/100))} шығады — классикалық қате.)`)};}
+},
+{id:'margin',level:3,title:{en:'Margin & markup',ru:'Маржа и наценка',kk:'Маржа мен үстеме баға'},blurb:{en:'Pricing for profit without mixing up the two',ru:'Ценообразование без путаницы между ними',kk:'Екеуін шатастырмай баға белгілеу'},
+lesson:{
+en:()=>`<p>Both measure profit, but against different bases. Mixing them up is one of the most common pricing errors.</p>
+<ul><li><b>Gross margin</b> = profit ÷ <b>selling price</b>.</li><li><b>Markup</b> = profit ÷ <b>cost</b>.</li><li>Cost 80, price 100 → profit 20 → margin <b>20%</b>, markup <b>25%</b>. Markup is always the bigger number.</li>
+<li><b>Price for a target margin:</b> price = cost ÷ (1 − margin). Cost 600 at 25% margin → 600 ÷ 0.75 = <b>800</b>. Adding 25% to cost (750) gives only a 20% margin.</li></ul>
+${ex('Unit cost $420, target margin 30%: 420 ÷ 0.70 = <b>$600</b>. Check: profit 180 ÷ 600 = 30% ✓')}`,
+ru:()=>`<p>Обе величины измеряют прибыль, но относительно разной базы. Путать их — одна из самых частых ошибок в ценообразовании.</p>
+<ul><li><b>Валовая маржа</b> = прибыль ÷ <b>цена продажи</b>.</li><li><b>Наценка</b> = прибыль ÷ <b>себестоимость</b>.</li><li>Себестоимость 80, цена 100 → прибыль 20 → маржа <b>20%</b>, наценка <b>25%</b>. Наценка всегда больше.</li>
+<li><b>Цена под целевую маржу:</b> цена = себестоимость ÷ (1 − маржа). Себестоимость 600, маржа 25% → 600 ÷ 0,75 = <b>800</b>. Если просто добавить 25% (750), маржа будет лишь 20%.</li></ul>
+${ex('Себестоимость $420, целевая маржа 30%: 420 ÷ 0,70 = <b>$600</b>. Проверка: прибыль 180 ÷ 600 = 30% ✓')}`,
+kk:()=>`<p>Екеуі де пайданы өлшейді, бірақ әртүрлі негізге қатысты. Оларды шатастыру — баға белгілеудегі ең жиі қателердің бірі.</p>
+<ul><li><b>Жалпы маржа</b> = пайда ÷ <b>сату бағасы</b>.</li><li><b>Үстеме баға</b> = пайда ÷ <b>өзіндік құн</b>.</li><li>Өзіндік құн 80, баға 100 → пайда 20 → маржа <b>20%</b>, үстеме <b>25%</b>. Үстеме әрқашан үлкенірек.</li>
+<li><b>Мақсатты маржаға баға:</b> баға = өзіндік құн ÷ (1 − маржа). Өзіндік құн 600, маржа 25% → 600 ÷ 0,75 = <b>800</b>. Өзіндік құнға жай 25% қоссаңыз (750), маржа тек 20% болады.</li></ul>
+${ex('Өзіндік құн $420, мақсатты маржа 30%: 420 ÷ 0,70 = <b>$600</b>. Тексеру: пайда 180 ÷ 600 = 30% ✓')}`},
+gen(){const tt=ri(0,2);
+ if(tt===0){const m=pick([10,15,20,25,30,40]),Pp=ri(5,60)*100,C=Pp-Pp*m/100;return{q:X(`You buy a unit for ${money(C)} and sell it for ${money(Pp)}. What is your gross margin?`,`Вы покупаете товар за ${money(C)} и продаёте за ${money(Pp)}. Какова валовая маржа?`,`Тауарды ${money(C)}-ға сатып алып, ${money(Pp)}-ға сатасыз. Жалпы маржа қанша?`),ans:m,unit:'%',tol:0.05,
+  explain:X('Margin = profit ÷ <i>price</i>','Маржа = прибыль ÷ <i>цена</i>','Маржа = пайда ÷ <i>баға</i>')+`: ${money(Pp-C)} ÷ ${money(Pp)} = <b>${m}%</b>.`};}
+ if(tt===1){const k=pick([10,20,25,40,50,60]),C=ri(5,60)*100,Pp=C+C*k/100;return{q:X(`Cost ${money(C)}, selling price ${money(Pp)}. What is the markup?`,`Себестоимость ${money(C)}, цена продажи ${money(Pp)}. Какова наценка?`,`Өзіндік құн ${money(C)}, сату бағасы ${money(Pp)}. Үстеме баға қанша?`),ans:k,unit:'%',tol:0.05,
+  explain:X('Markup = profit ÷ <i>cost</i>','Наценка = прибыль ÷ <i>себестоимость</i>','Үстеме = пайда ÷ <i>өзіндік құн</i>')+`: ${money(Pp-C)} ÷ ${money(C)} = <b>${k}%</b>. `+X(`(Margin on the same deal: ${fmt((Pp-C)/Pp*100,1)}%.)`,`(Маржа по той же сделке: ${fmt((Pp-C)/Pp*100,1)}%.)`,`(Сол мәміледегі маржа: ${fmt((Pp-C)/Pp*100,1)}%.)`)};}
+ const C=ri(20,200)*10,m=pick([20,25,30,40,50]),Pp=C/(1-m/100);
+ return{q:X(`A unit costs ${money(C)}. What selling price gives a ${m}% gross margin? (nearest dollar)`,`Себестоимость ${money(C)}. Какая цена даст валовую маржу ${m}%? (с точностью до доллара)`,`Өзіндік құн ${money(C)}. Қандай баға ${m}% жалпы маржа береді? (долларға дейін дөңгелектеңіз)`),ans:Pp,tol:0.51,show:money(Pp),
+  explain:X('Price = cost ÷ (1 − margin)','Цена = себестоимость ÷ (1 − маржа)','Баға = өзіндік құн ÷ (1 − маржа)')+` = ${money(C)} ÷ ${fmt(1-m/100)} = <b>${money(Pp)}</b>. `+X(`Adding ${m}% to cost (${money(C*(1+m/100))}) would fall short.`,`Если прибавить ${m}% к себестоимости (${money(C*(1+m/100))}), маржи не хватит.`,`Өзіндік құнға ${m}% қоссаңыз (${money(C*(1+m/100))}), маржа жетпейді.`)};}
+},
+{id:'interest',level:3,title:{en:'Interest & growth',ru:'Проценты и рост',kk:'Пайыздық өсім'},blurb:{en:'Simple vs compound interest, effective rates',ru:'Простые и сложные проценты, эффективная ставка',kk:'Жай және күрделі пайыз, тиімді мөлшерлеме'},
+lesson:{
+en:()=>`<ul><li><b>Simple interest:</b> I = P × r × t. $10,000 at 8% for 3 years → $2,400.</li>
+<li><b>Compound interest:</b> A = P × (1 + r)<sup>t</sup>. $10,000 at 8% for 3 years → 10,000 × 1.08³ ≈ $12,597.</li>
+<li><b>Monthly compounding:</b> effective annual rate = (1 + r/12)<sup>12</sup> − 1. A "12% per year" loan compounded monthly really costs about <b>12.68%</b>.</li></ul>
+${ex('$5,000 at 10% compounded for 2 years: 5,000 × 1.1² = 5,000 × 1.21 = <b>$6,050</b>')}`,
+ru:()=>`<ul><li><b>Простые проценты:</b> I = P × r × t. $10 000 под 8% на 3 года → $2 400.</li>
+<li><b>Сложные проценты:</b> A = P × (1 + r)<sup>t</sup>. $10 000 под 8% на 3 года → 10 000 × 1,08³ ≈ $12 597.</li>
+<li><b>Ежемесячная капитализация:</b> эффективная годовая ставка = (1 + r/12)<sup>12</sup> − 1. Кредит «12% годовых» с ежемесячным начислением на деле стоит около <b>12,68%</b>.</li></ul>
+${ex('$5 000 под 10% на 2 года (сложные): 5 000 × 1,1² = 5 000 × 1,21 = <b>$6 050</b>')}`,
+kk:()=>`<ul><li><b>Жай пайыз:</b> I = P × r × t. $10 000, 8%, 3 жыл → $2 400.</li>
+<li><b>Күрделі пайыз:</b> A = P × (1 + r)<sup>t</sup>. $10 000, 8%, 3 жыл → 10 000 × 1,08³ ≈ $12 597.</li>
+<li><b>Ай сайынғы капиталдандыру:</b> тиімді жылдық мөлшерлеме = (1 + r/12)<sup>12</sup> − 1. Ай сайын есептелетін «жылдық 12%» несие шын мәнінде шамамен <b>12,68%</b> тұрады.</li></ul>
+${ex('$5 000, 10%, 2 жыл (күрделі): 5 000 × 1,1² = 5 000 × 1,21 = <b>$6 050</b>')}`},
+gen(){const tt=ri(0,2);
+ if(tt===0){const Pp=ri(1,50)*1000,r=pick([4,5,6,8,10,12]),y=ri(1,5);const I=Pp*r*y/100;return{q:X(`Simple interest: ${money(Pp)} at ${r}% per year for ${y} ${yrs(y)}. How much interest is earned?`,`Простые проценты: ${money(Pp)} под ${r}% годовых на ${y} ${yrs(y)}. Сколько составят проценты?`,`Жай пайыз: ${money(Pp)}, жылдық ${r}%, ${y} жыл. Пайыз сомасы қанша?`),ans:I,tol:0.5,show:money(I),explain:`I = P × r × t = ${money(Pp)} × ${fmt(r/100)} × ${y} = <b>${money(I)}</b>.`};}
+ if(tt===1){const Pp=ri(1,20)*1000,r=pick([5,8,10,12]),y=ri(2,5);const A=Pp*Math.pow(1+r/100,y);return{q:X(`${money(Pp)} grows at ${r}% per year, compounded annually. What is it worth after ${y} years? (nearest dollar)`,`${money(Pp)} растут на ${r}% в год (сложные проценты). Сколько будет через ${y} ${yrs(y)}? (до доллара)`,`${money(Pp)} жылына ${r}%-ға өседі (күрделі пайыз). ${y} жылдан кейін қанша болады? (долларға дейін)`),ans:A,tol:Math.max(1,A*0.001),show:money(Math.round(A)),
+  explain:`A = P(1 + r)<sup>t</sup> = ${money(Pp)} × ${fmt(1+r/100)}<sup>${y}</sup> = ${money(Pp)} × ${fmt(Math.pow(1+r/100,y))} ≈ <b>${money(Math.round(A))}</b>.`};}
+ const r=pick([6,9,12,18,24]);const e=(Math.pow(1+r/1200,12)-1)*100;
+ return{q:X(`A loan charges ${r}% per year, compounded monthly. What is the effective annual rate? (1 decimal place)`,`Кредит: ${r}% годовых с ежемесячной капитализацией. Какова эффективная годовая ставка? (1 знак после запятой)`,`Несие: жылдық ${r}%, ай сайын капиталдандырылады. Тиімді жылдық мөлшерлеме қанша? (үтірден кейін 1 таңба)`),ans:e,unit:'%',tol:0.06,show:fmt(e,2)+'%',explain:`(1 + ${r}% ÷ 12)<sup>12</sup> − 1 = (1 + ${fmt(r/1200)})<sup>12</sup> − 1 ≈ <b>${fmt(e,2)}%</b>.`};}
+},
+{id:'costs',level:3,title:{en:'Costs, FX & break-even',ru:'Затраты, валюта и безубыточность',kk:'Шығындар, валюта және залалсыздық'},blurb:{en:'Currency conversion, landed cost, VAT, break-even',ru:'Конвертация валют, полная себестоимость, НДС, точка безубыточности',kk:'Валюта айырбастау, толық өзіндік құн, ҚҚС, залалсыздық нүктесі'},
+lesson:{
+en:()=>`<ul><li><b>FX:</b> USD → KZT multiply by the rate; KZT → USD divide. Sanity-check: tenge amounts should be much bigger.</li>
+<li><b>Landed cost per unit</b> = (goods + duty + freight + other costs) ÷ units.</li><li><b>Break-even units</b> = fixed costs ÷ (price − variable cost per unit). Always round <b>up</b>.</li>
+<li><b>VAT:</b> gross = net × (1 + rate). To remove VAT, <b>divide</b> by (1 + rate). Don't subtract the percentage.</li></ul>
+${ex('Fixed costs $12,000/month, price $90, variable cost $65 → contribution $25 → 12,000 ÷ 25 = <b>480 units</b>.')}`,
+ru:()=>`<ul><li><b>Валюта:</b> USD → KZT — умножаем на курс; KZT → USD — делим. Проверка здравым смыслом: сумма в тенге должна быть намного больше.</li>
+<li><b>Полная себестоимость единицы</b> = (товар + пошлина + фрахт + прочие расходы) ÷ количество.</li><li><b>Точка безубыточности (шт.)</b> = постоянные затраты ÷ (цена − переменные затраты на единицу). Округляйте <b>вверх</b>.</li>
+<li><b>НДС:</b> сумма с НДС = без НДС × (1 + ставка). Чтобы выделить НДС, <b>делите</b> на (1 + ставка), а не вычитайте процент.</li></ul>
+${ex('Постоянные затраты $12 000/мес., цена $90, переменные $65 → маржинальный доход $25 → 12 000 ÷ 25 = <b>480 шт.</b>')}`,
+kk:()=>`<ul><li><b>Валюта:</b> USD → KZT — бағамға көбейтеміз; KZT → USD — бөлеміз. Ақылға салып тексеріңіз: теңгедегі сома әлдеқайда үлкен болуы керек.</li>
+<li><b>Бір дананың толық өзіндік құны</b> = (тауар + баж + тасымал + басқа шығындар) ÷ дана саны.</li><li><b>Залалсыздық нүктесі (дана)</b> = тұрақты шығындар ÷ (баға − бір данаға шаққандағы өзгермелі шығын). Әрқашан <b>жоғары</b> дөңгелектеңіз.</li>
+<li><b>ҚҚС:</b> ҚҚС-мен сома = ҚҚС-сыз × (1 + мөлшерлеме). ҚҚС-ты алып тастау үшін (1 + мөлшерлеме)-ге <b>бөліңіз</b>, пайызды азайтпаңыз.</li></ul>
+${ex('Тұрақты шығын айына $12 000, баға $90, өзгермелі шығын $65 → маржиналдық табыс $25 → 12 000 ÷ 25 = <b>480 дана</b>.')}`},
+gen(){const tt=ri(0,3);
+ if(tt===0){const X0=ri(5,200)*100,rate=ri(470,540);
+  if(R()<0.5)return{q:X(`Convert ${money(X0)} to tenge at ${rate} ₸ per $1.`,`Переведите ${money(X0)} в тенге по курсу ${rate} ₸ за $1.`,`${money(X0)}-ды $1 = ${rate} ₸ бағамы бойынша теңгеге айырбастаңыз.`),ans:X0*rate,tol:0.5,unit:'₸',show:tg(X0*rate),explain:`USD → KZT: ${fmt(X0)} × ${rate} = <b>${tg(X0*rate)}</b>.`};
+  return{q:X(`Convert ${tg(X0*rate)} to US dollars at ${rate} ₸ per $1.`,`Переведите ${tg(X0*rate)} в доллары по курсу ${rate} ₸ за $1.`,`${tg(X0*rate)}-ні $1 = ${rate} ₸ бағамы бойынша долларға айырбастаңыз.`),ans:X0,tol:0.5,unit:'$',show:money(X0),explain:`KZT → USD: ${fmt(X0*rate)} ÷ ${rate} = <b>${money(X0)}</b>.`};}
+ if(tt===1){const n=pick([100,200,250,400,500]),u=ri(80,600),F=ri(10,60)*100,d=pick([0,5,10]);const G=n*u,tot=G*(1+d/100)+F,per=tot/n;
+  return{q:X(`You import ${n} units at ${money(u)} each. Freight is ${money(F)}${d?` and duty is ${d}% of the goods value`:''}. What is the landed cost per unit?`,`Вы импортируете ${n} шт. по ${money(u)}. Фрахт — ${money(F)}${d?`, пошлина — ${d}% от стоимости товара`:''}. Какова полная себестоимость единицы?`,`${n} дана тауарды ${money(u)}-дан импорттайсыз. Тасымал — ${money(F)}${d?`, баж — тауар құнының ${d}%-ы`:''}. Бір дананың толық өзіндік құны қанша?`),ans:per,tol:0.011,show:money(per),
+  explain:`${money(G)}${d?` + ${money(G*d/100)}`:''} + ${money(F)} = ${money(tot)}. ÷ ${n} = <b>${money(per)}</b>.`};}
+ if(tt===2){const F=ri(5,50)*1000,p=ri(30,120),v=p-ri(5,25);const units=Math.ceil(F/(p-v));
+  return{q:X(`Fixed costs are ${money(F)} a month. Each unit sells for ${money(p)} and costs ${money(v)} to make. How many units must you sell to break even?`,`Постоянные затраты — ${money(F)} в месяц. Цена единицы — ${money(p)}, переменные затраты — ${money(v)}. Сколько единиц нужно продать, чтобы выйти в ноль?`,`Тұрақты шығындар айына ${money(F)}. Бір дананың бағасы ${money(p)}, өзгермелі шығыны ${money(v)}. Залалсыздыққа жету үшін неше дана сату керек?`),ans:units,
+  explain:`${money(p)} − ${money(v)} = ${money(p-v)}. ${money(F)} ÷ ${money(p-v)} = ${fmt(F/(p-v),2)} → `+X('round up','округляем вверх','жоғары дөңгелектейміз')+` → <b>${fmt(units)}</b>.`};}
+ const r=pick([10,12,16,20]);
+ if(R()<.5){const net=ri(10,500)*10;const g=net*(1+r/100);return{q:X(`Net price ${tg(net)}, VAT ${r}%. What is the price including VAT?`,`Цена без НДС ${tg(net)}, НДС ${r}%. Какова цена с НДС?`,`ҚҚС-сыз баға ${tg(net)}, ҚҚС ${r}%. ҚҚС-пен баға қанша?`),ans:g,tol:0.5,unit:'₸',show:tg(g),explain:`${fmt(net)} × ${fmt(1+r/100)} = <b>${tg(g)}</b>.`};}
+ const net=ri(4,200)*25,g=net+net*r/100;
+ return{q:X(`An invoice total of ${tg(g)} includes ${r}% VAT. What is the amount before VAT?`,`Сумма счёта ${tg(g)} включает НДС ${r}%. Какова сумма без НДС?`,`${tg(g)} шот сомасына ${r}% ҚҚС кіреді. ҚҚС-сыз сома қанша?`),ans:net,tol:0.5,unit:'₸',show:tg(net),
+  explain:X(`Divide by ${fmt(1+r/100)}; don't subtract ${r}%`,`Делим на ${fmt(1+r/100)}, а не вычитаем ${r}%`,`${fmt(1+r/100)}-ге бөлеміз, ${r}%-ды азайтпаймыз`)+`: ${fmt(g,2)} ÷ ${fmt(1+r/100)} = <b>${tg(net)}</b>.`};}
+},
+/* ===== Level 4 ===== */
+{id:'quadratics',level:4,title:{en:'Quadratics',ru:'Квадратные уравнения',kk:'Квадрат теңдеулер'},blurb:{en:'Factoring, the discriminant, and the vertex',ru:'Разложение, дискриминант и вершина',kk:'Көбейткіштерге жіктеу, дискриминант, төбе'},
+lesson:{
+en:()=>`<ul><li><b>Factoring x² + bx + c:</b> find two numbers that multiply to c and add to b. x² − 2x − 15 → (x − 5)(x + 3) = 0 → x = 5 or −3.</li>
+<li><b>Quadratic formula:</b> x = (−b ± √(b² − 4ac)) ÷ 2a.</li><li><b>Discriminant</b> D = b² − 4ac: positive → two roots, zero → one, negative → no real roots.</li>
+<li><b>Vertex</b> (min or max) is at x = −b ÷ 2a. This is how you find an optimal price or quantity.</li></ul>${ex('x² + x − 12 = 0 → (x + 4)(x − 3) → x = <b>3</b> or <b>−4</b>')}`,
+ru:()=>`<ul><li><b>Разложение x² + bx + c:</b> найдите два числа, произведение которых c, а сумма b. x² − 2x − 15 → (x − 5)(x + 3) = 0 → x = 5 или −3.</li>
+<li><b>Формула корней:</b> x = (−b ± √(b² − 4ac)) ÷ 2a.</li><li><b>Дискриминант</b> D = b² − 4ac: положительный → два корня, ноль → один, отрицательный → нет действительных корней.</li>
+<li><b>Вершина</b> (минимум или максимум) — при x = −b ÷ 2a. Так ищут оптимальную цену или объём.</li></ul>${ex('x² + x − 12 = 0 → (x + 4)(x − 3) → x = <b>3</b> или <b>−4</b>')}`,
+kk:()=>`<ul><li><b>x² + bx + c жіктеу:</b> көбейтіндісі c, қосындысы b болатын екі санды табыңыз. x² − 2x − 15 → (x − 5)(x + 3) = 0 → x = 5 немесе −3.</li>
+<li><b>Түбірлер формуласы:</b> x = (−b ± √(b² − 4ac)) ÷ 2a.</li><li><b>Дискриминант</b> D = b² − 4ac: оң → екі түбір, нөл → бір түбір, теріс → нақты түбір жоқ.</li>
+<li><b>Төбе</b> (ең кіші не ең үлкен мән) x = −b ÷ 2a нүктесінде. Тиімді баға не көлемді осылай табады.</li></ul>${ex('x² + x − 12 = 0 → (x + 4)(x − 3) → x = <b>3</b> немесе <b>−4</b>')}`},
+gen(){const tt=ri(0,2);
+ if(tt===0){let r1=ri(-8,9),r2=ri(-8,9);if(r1===r2)r2=r1+3;const big=R()<.5;const ans=big?Math.max(r1,r2):Math.min(r1,r2);const e=poly([1,-(r1+r2),r1*r2],['x²','x','']);
+  return{q:X(`Solve ${e} = 0. Give the ${big?'larger':'smaller'} root.`,`Решите ${e} = 0. Укажите ${big?'больший':'меньший'} корень.`,`${e} = 0 теңдеуін шешіңіз. ${big?'Үлкен':'Кіші'} түбірін жазыңыз.`),ans,
+  explain:X(`Two numbers that multiply to ${N(r1*r2)} and add to ${N(-(r1+r2))}`,`Два числа с произведением ${N(r1*r2)} и суммой ${N(-(r1+r2))}`,`Көбейтіндісі ${N(r1*r2)}, қосындысы ${N(-(r1+r2))} болатын екі сан`)+`: ${N(-r1)}; ${N(-r2)}. (${poly([1,-r1],['x',''])})(${poly([1,-r2],['x',''])}) = 0 → x = ${N(r1)}; ${N(r2)}. → <b>${N(ans)}</b>.`};}
+ if(tt===1){const a=ri(1,4),b=ri(-9,9),c=ri(-9,9);const D=b*b-4*a*c;const e=poly([a,b,c],['x²','x','']);
+  return{q:X(`For ${e} = 0, what is the discriminant b² − 4ac?`,`Найдите дискриминант b² − 4ac для ${e} = 0.`,`${e} = 0 үшін b² − 4ac дискриминантын табыңыз.`),ans:D,
+  explain:`${P(b)}² − 4 × ${a} × ${P(c)} = ${b*b} ${-4*a*c<0?'−':'+'} ${Math.abs(4*a*c)} = <b>${N(D)}</b>. `+(D>0?X('Positive → two real roots.','Положительный → два корня.','Оң → екі түбір.'):D===0?X('Zero → one repeated root.','Ноль → один корень.','Нөл → бір түбір.'):X('Negative → no real roots.','Отрицательный → нет действительных корней.','Теріс → нақты түбір жоқ.'))};}
+ const a=pick([1,2,-1,-2,4]);const b=ri(-12,12)||6,c=ri(-9,9);const v=-b/(2*a);const e=poly([a,b,c],['x²','x','']);
+ return{q:X(`At what x does ${e} reach its ${a>0?'minimum':'maximum'}?`,`При каком x выражение ${e} достигает ${a>0?'минимума':'максимума'}?`,`x-тің қандай мәнінде ${e} өрнегі ${a>0?'ең кіші':'ең үлкен'} мәнге жетеді?`),ans:v,tol:0.01,explain:`x = −b ÷ 2a = ${N(-b)} ÷ ${N(2*a)} = <b>${fmt(v,3)}</b>.`};}
+},
+{id:'logs',level:4,title:{en:'Logarithms & exponentials',ru:'Логарифмы и экспоненты',kk:'Логарифмдер мен көрсеткіштік функциялар'},blurb:{en:'Logs as "which power?", log rules, doubling time',ru:'Логарифм как «какая степень?», свойства, время удвоения',kk:'Логарифм — «қай дәреже?», қасиеттері, екі еселену уақыты'},
+lesson:{
+en:()=>`<p>log<sub>b</sub> N answers: <b>"what power of b gives N?"</b> log<sub>2</sub> 32 = 5 because 2⁵ = 32.</p>
+<ul><li><b>Rules:</b> log(ab) = log a + log b; log(a/b) = log a − log b; log(a<sup>k</sup>) = k·log a.</li><li><b>Solving b<sup>x</sup> = N:</b> x = log N ÷ log b.</li>
+<li><b>Doubling time</b> at r% growth: t = ln 2 ÷ ln(1 + r). Quick estimate: <b>rule of 72</b>, t ≈ 72 ÷ r. At 8%, about 9 years.</li></ul>${ex('Given log 2 ≈ 0.301: log 8 = log 2³ = 3 × 0.301 = <b>0.903</b>')}`,
+ru:()=>`<p>log<sub>b</sub> N отвечает на вопрос: <b>«в какую степень возвести b, чтобы получить N?»</b> log<sub>2</sub> 32 = 5, потому что 2⁵ = 32.</p>
+<ul><li><b>Свойства:</b> log(ab) = log a + log b; log(a/b) = log a − log b; log(a<sup>k</sup>) = k·log a.</li><li><b>Решение b<sup>x</sup> = N:</b> x = log N ÷ log b.</li>
+<li><b>Время удвоения</b> при росте r%: t = ln 2 ÷ ln(1 + r). Быстрая оценка — <b>правило 72</b>: t ≈ 72 ÷ r. При 8% — около 9 лет.</li></ul>${ex('Если log 2 ≈ 0,301, то log 8 = log 2³ = 3 × 0,301 = <b>0,903</b>')}`,
+kk:()=>`<p>log<sub>b</sub> N мына сұраққа жауап береді: <b>«N алу үшін b-ны қай дәрежеге шығару керек?»</b> log<sub>2</sub> 32 = 5, себебі 2⁵ = 32.</p>
+<ul><li><b>Қасиеттері:</b> log(ab) = log a + log b; log(a/b) = log a − log b; log(a<sup>k</sup>) = k·log a.</li><li><b>b<sup>x</sup> = N шешу:</b> x = log N ÷ log b.</li>
+<li>r% өсімде <b>екі еселену уақыты</b>: t = ln 2 ÷ ln(1 + r). Жылдам бағалау — <b>72 ережесі</b>: t ≈ 72 ÷ r. 8%-да шамамен 9 жыл.</li></ul>${ex('log 2 ≈ 0,301 болса, log 8 = log 2³ = 3 × 0,301 = <b>0,903</b>')}`},
+gen(){const tt=ri(0,3);
+ if(tt===0){const b=pick([2,3,5,10]),k=b===2?ri(3,7):ri(2,4);return{q:`log<sub>${b}</sub> ${fmt(b**k)} = ?`,ans:k,explain:`${b}<sup>${k}</sup> = ${fmt(b**k)} → <b>${k}</b>.`};}
+ if(tt===1){const b=pick([2,3,4,5]),k=ri(2,5);return{q:X('Solve','Решите','Шешіңіз:')+` ${b}<sup>x</sup> = ${fmt(b**k)}`,ans:k,explain:`${Array(k).fill(b).join(' × ')} = ${fmt(b**k)} → x = <b>${k}</b>.`};}
+ if(tt===2){const [n,v,how]=pick([[6,0.778,'log 2 + log 3'],[8,0.903,'3 × log 2'],[9,0.954,'2 × log 3'],[12,1.079,'2·log 2 + log 3'],[18,1.255,'log 2 + 2·log 3'],[20,1.301,'log 2 + log 10'],[5,0.699,'log 10 − log 2'],[1.5,0.176,'log 3 − log 2']]);
+  return{q:X(`Given log 2 ≈ ${fmt(0.301)} and log 3 ≈ ${fmt(0.477)} (base 10), find log ${fmt(n)}.`,`Дано: log 2 ≈ ${fmt(0.301)}, log 3 ≈ ${fmt(0.477)} (десятичные). Найдите log ${fmt(n)}.`,`Берілгені: log 2 ≈ ${fmt(0.301)}, log 3 ≈ ${fmt(0.477)} (ондық). log ${fmt(n)} табыңыз.`),ans:v,tol:0.004,explain:`log ${fmt(n)} = ${how} ≈ <b>${fmt(v)}</b>. (log 10 = 1.)`};}
+ const r=pick([4,6,8,9,12]);const y=Math.log(2)/Math.log(1+r/100);
+ return{q:X(`An investment grows ${r}% per year, compounded. Roughly how many years until it doubles? (1 decimal place)`,`Вложение растёт на ${r}% в год (сложные проценты). Примерно через сколько лет оно удвоится? (1 знак после запятой)`,`Инвестиция жылына ${r}%-ға өседі (күрделі пайыз). Шамамен неше жылда екі есе өседі? (үтірден кейін 1 таңба)`),ans:y,tol:0.4,show:fmt(y,1),
+  explain:`t = ln 2 ÷ ln(${fmt(1+r/100)}) = ${fmt(Math.log(2))} ÷ ${fmt(Math.log(1+r/100))} ≈ <b>${fmt(y,1)}</b>. `+X('Rule of 72 check','Проверка правилом 72','72 ережесімен тексеру')+`: 72 ÷ ${r} = ${fmt(72/r,1)}.`};}
+},
+{id:'derivatives',level:4,title:{en:'Rates of change (calculus)',ru:'Скорость изменения (производные)',kk:'Өзгеру жылдамдығы (туындылар)'},blurb:{en:'Derivatives, slopes, and finding the optimum',ru:'Производные, наклон и поиск оптимума',kk:'Туындылар, көлбеулік және оңтайлы мәнді табу'},
+lesson:{
+en:()=>`<p>A derivative measures <b>how fast something changes</b>: the slope of a curve at a point. In business it's "marginal": marginal cost, marginal revenue.</p>
+<ul><li><b>Power rule:</b> d/dx (a·x<sup>n</sup>) = a·n·x<sup>n−1</sup>. So 3x⁴ → 12x³.</li><li>Constants vanish; sums go term by term. x² + 5x + 7 → 2x + 5.</li><li><b>Optimum:</b> a maximum or minimum is where the derivative equals zero.</li></ul>
+${ex('Profit P(q) = −2q² + 160q − 900. P′(q) = −4q + 160 = 0 → q = <b>40</b> units maximises profit.')}`,
+ru:()=>`<p>Производная показывает, <b>насколько быстро что-то меняется</b> — наклон кривой в точке. В бизнесе это «предельные» величины: предельные издержки, предельный доход.</p>
+<ul><li><b>Степенное правило:</b> (a·x<sup>n</sup>)′ = a·n·x<sup>n−1</sup>. Например, 3x⁴ → 12x³.</li><li>Константы исчезают, сумма дифференцируется почленно. x² + 5x + 7 → 2x + 5.</li><li><b>Оптимум:</b> максимум или минимум там, где производная равна нулю.</li></ul>
+${ex('Прибыль P(q) = −2q² + 160q − 900. P′(q) = −4q + 160 = 0 → прибыль максимальна при q = <b>40</b> шт.')}`,
+kk:()=>`<p>Туынды бір нәрсенің <b>қаншалықты жылдам өзгеретінін</b> көрсетеді — қисықтың нүктедегі көлбеулігі. Бизнесте бұл «шекті» шамалар: шекті шығын, шекті табыс.</p>
+<ul><li><b>Дәрежелік ереже:</b> (a·x<sup>n</sup>)′ = a·n·x<sup>n−1</sup>. Мысалы, 3x⁴ → 12x³.</li><li>Тұрақтылар жойылады, қосынды мүшелеп дифференциалданады. x² + 5x + 7 → 2x + 5.</li><li><b>Оңтайлы мән:</b> ең үлкен не ең кіші мән туынды нөлге тең жерде.</li></ul>
+${ex('Пайда P(q) = −2q² + 160q − 900. P′(q) = −4q + 160 = 0 → пайда q = <b>40</b> данада ең үлкен.')}`},
+gen(){const tt=ri(0,2);
+ if(tt===0){const a=ri(1,5),n=ri(2,4),k=ri(-3,3);const ans=a*n*k**(n-1);const pw=n-1>1?`<sup>${n-1}</sup>`:'';
+  return{q:`f(x) = ${a===1?'':a}x<sup>${n}</sup>. `+X(`Find f′(${N(k)}).`,`Найдите f′(${N(k)}).`,`f′(${N(k)}) табыңыз.`),ans,explain:`f′(x) = ${a*n}x${pw}. f′(${N(k)}) = ${a*n} × ${P(k)}${pw} = <b>${N(ans)}</b>.`};}
+ if(tt===1){const a=ri(1,4)*pick([1,-1]),b=ri(-8,8),c=ri(-9,9),k=ri(-3,4);const ans=2*a*k+b;const e=poly([a,b,c],['x²','x','']);
+  return{q:X(`What is the slope of f(x) = ${e} at x = ${N(k)}?`,`Найдите угловой коэффициент касательной к f(x) = ${e} при x = ${N(k)}.`,`f(x) = ${e} функциясының x = ${N(k)} нүктесіндегі көлбеулігін табыңыз.`),ans,explain:`f′(x) = ${poly([2*a,b],['x',''])}. x = ${N(k)}: ${N(2*a)} × ${P(k)} ${b<0?'−':'+'} ${Math.abs(b)} = <b>${N(ans)}</b>.`};}
+ const a=ri(1,5),q=ri(5,50),b=2*a*q,c=ri(10,200)*10;const e=`P(q) = −${a===1?'':a}q² + ${b}q − ${fmt(c)}`;
+ return{q:X(`Profit ${e}. Which quantity q maximises profit?`,`Прибыль ${e}. При каком объёме q прибыль максимальна?`,`Пайда ${e}. Қандай q көлемінде пайда ең үлкен?`),ans:q,explain:`P′(q) = 0: −${2*a}q + ${b} = 0 → q = ${b} ÷ ${2*a} = <b>${q}</b>.`};}
+},
+{id:'probability',level:4,title:{en:'Probability & statistics',ru:'Вероятность и статистика',kk:'Ықтималдық және статистика'},blurb:{en:'Chances, combinations, averages, expected value',ru:'Шансы, сочетания, средние, матожидание',kk:'Мүмкіндіктер, терулер, орташа мәндер, күтілетін мән'},
+lesson:{
+en:()=>`<ul><li><b>Probability</b> = favourable outcomes ÷ total outcomes (when all are equally likely).</li><li><b>Independent events:</b> multiply. <b>"At least one"</b> = 1 − P(none).</li>
+<li><b>Combinations:</b> choosing r from n, order irrelevant: C(n, r) = n! ÷ (r!(n − r)!). C(6, 2) = 15.</li><li><b>Mean</b> = sum ÷ count. <b>Median</b> = middle value when sorted (even count: average the middle two).</li>
+<li><b>Expected value</b> = Σ (outcome × probability): what a decision is worth on average.</li></ul>${ex('A bid wins $50,000 with probability 0.3 and costs $5,000 to prepare: EV = 0.3 × 50,000 − 5,000 = <b>$10,000</b>.')}`,
+ru:()=>`<ul><li><b>Вероятность</b> = благоприятные исходы ÷ все исходы (если они равновозможны).</li><li><b>Независимые события:</b> вероятности перемножаются. <b>«Хотя бы один»</b> = 1 − P(ни одного).</li>
+<li><b>Сочетания:</b> выбрать r из n без учёта порядка: C(n, r) = n! ÷ (r!(n − r)!). C(6, 2) = 15.</li><li><b>Среднее</b> = сумма ÷ количество. <b>Медиана</b> = середина упорядоченного ряда (при чётном числе — среднее двух центральных).</li>
+<li><b>Матожидание</b> = Σ (результат × вероятность): сколько решение стоит в среднем.</li></ul>${ex('Тендер приносит $50 000 с вероятностью 0,3, подготовка стоит $5 000: EV = 0,3 × 50 000 − 5 000 = <b>$10 000</b>.')}`,
+kk:()=>`<ul><li><b>Ықтималдық</b> = қолайлы нәтижелер ÷ барлық нәтижелер (бәрі тең мүмкін болса).</li><li><b>Тәуелсіз оқиғалар:</b> ықтималдықтар көбейтіледі. <b>«Кемінде біреуі»</b> = 1 − P(бірде-біреуі емес).</li>
+<li><b>Терулер:</b> n-нен r-ді ретсіз таңдау: C(n, r) = n! ÷ (r!(n − r)!). C(6, 2) = 15.</li><li><b>Орташа мән</b> = қосынды ÷ саны. <b>Медиана</b> = реттелген қатардың ортасы (жұп болса, екі ортаңғысының орташасы).</li>
+<li><b>Күтілетін мән</b> = Σ (нәтиже × ықтималдық): шешімнің орташа құны.</li></ul>${ex('Тендер 0,3 ықтималдықпен $50 000 әкеледі, дайындау $5 000 тұрады: EV = 0,3 × 50 000 − 5 000 = <b>$10 000</b>.')}`},
+gen(){const tt=ri(0,5);
+ if(tt===0){const s=ri(2,12),w=6-Math.abs(s-7);return{q:X(`Two fair dice are rolled. What is the probability the total is ${s}?`,`Бросают две игральные кости. Какова вероятность, что сумма равна ${s}?`,`Екі ойын сүйегі лақтырылды. Қосындының ${s} болу ықтималдығы қанша?`),hint:t('hint3'),ans:w/36,tol:0.005,show:frac(w,36),explain:`${w}/36 = <b>${frac(w,36)}</b> ≈ ${fmt(w/36,3)}.`};}
+ if(tt===1){const n=ri(2,5);return{q:X(`A fair coin is flipped ${n} times. What is the probability of at least one head?`,`Монету подбрасывают ${n} раз(а). Какова вероятность, что орёл выпадет хотя бы раз?`,`Тиын ${n} рет лақтырылды. Кемінде бір рет елтаңба түсу ықтималдығы қанша?`),hint:t('hintF'),ans:1-1/2**n,tol:0.005,show:frac(2**n-1,2**n),
+  explain:`P(0) = (1/2)<sup>${n}</sup> = 1/${2**n}. 1 − 1/${2**n} = <b>${frac(2**n-1,2**n)}</b>.`};}
+ if(tt===2){const n=ri(5,10),r=ri(2,4);let c=1,np=1,f=1;const nums=[];for(let i=0;i<r;i++){c=c*(n-i)/(i+1);np*=n-i;f*=i+1;nums.push(n-i);}
+  return{q:X(`In how many ways can you choose ${r} people from a group of ${n}? (order doesn't matter)`,`Сколькими способами можно выбрать ${r} человек из ${n}? (порядок не важен)`,`${n} адамнан ${r} адамды неше тәсілмен таңдауға болады? (рет маңызды емес)`),ans:c,explain:`C(${n}, ${r}) = (${nums.join(' × ')}) ÷ ${r}! = ${fmt(np)} ÷ ${f} = <b>${c}</b>.`};}
+ if(tt===3){const xs=Array.from({length:5},()=>ri(2,40));const s=xs.reduce((a,b)=>a+b);return{q:X(`Find the mean of ${xs.join('; ')}.`,`Найдите среднее: ${xs.join('; ')}.`,`Орташа мәнін табыңыз: ${xs.join('; ')}.`),ans:s/5,tol:0.01,explain:`${s} ÷ 5 = <b>${fmt(s/5,2)}</b>.`};}
+ if(tt===4){const xs=Array.from({length:6},()=>ri(1,50));const s=[...xs].sort((a,b)=>a-b);const med=(s[2]+s[3])/2;return{q:X(`Find the median of ${xs.join('; ')}.`,`Найдите медиану: ${xs.join('; ')}.`,`Медианасын табыңыз: ${xs.join('; ')}.`),ans:med,tol:0.01,
+  explain:`${s.join('; ')} → (${s[2]} + ${s[3]}) ÷ 2 = <b>${fmt(med)}</b>.`};}
+ const p=pick([0.1,0.2,0.25,0.4,0.5]),W=ri(2,20)*10,L=ri(1,10)*10;const ev=p*W-(1-p)*L;
+ return{q:X(`A bet wins $${W} with probability ${fmt(p)} and otherwise loses $${L}. What is the expected value per bet?`,`Ставка выигрывает $${W} с вероятностью ${fmt(p)}, иначе проигрывает $${L}. Каково матожидание одной ставки?`,`Бәс ${fmt(p)} ықтималдықпен $${W} ұтады, әйтпесе $${L} ұтылады. Бір бәстің күтілетін мәні қанша?`),ans:ev,tol:0.01,unit:'$',show:money(ev),
+  explain:`EV = ${fmt(p)} × ${W} − ${fmt(1-p)} × ${L} = ${fmt(p*W)} − ${fmt((1-p)*L)} = <b>${money(ev)}</b>.`};}
+}
+];
+const T=Object.fromEntries(TOPICS.map(x=>[x.id,x]));
+const TT=id=>T[id].title[lang];
+const PLACEMENT=['mental','linear','percent','pctchange','expand','fractions','margin','quadratics','systems','interest','order','logs','powers','costs','probability'];
+
+/* ---------- questions (seeded, re-renderable in any language) ---------- */
+function genWith(id,seed){const prev=_rng;_rng=mulberry32(seed);try{return Object.assign({topic:id,seed,lang},T[id].gen());}finally{_rng=prev;}}
+function Q(item){if(item.lang!==lang)Object.assign(item,{hint:undefined,unit:undefined,show:undefined},genWith(item.topic,item.seed));return item;}
+function mk(tp,seen){let q;for(let k=0;k<6;k++){q=genWith(tp.id,Math.floor(Math.random()*2147483647));if(!seen||!seen.has(q.q))break;}if(seen)seen.add(q.q);return q;}
+
+/* ---------- age bands ---------- */
+const BANDS={
+ kid:{levels:[0,1],plan:['addsub','times','wordprob','shapes','addsub','times','wordprob','mental','fractions','order']},
+ pre:{levels:[0,1,2],plan:['addsub','times','mental','wordprob','percent','shapes','linear','fractions','expand','order','powers','systems']},
+ teen:{levels:[1,2,3,4],plan:PLACEMENT},
+ adult:{levels:[1,2,3,4],plan:PLACEMENT}};
+const bandOf=age=>age<=9?'kid':age<=13?'pre':age<=17?'teen':'adult';
+const B=()=>BANDS[bandOf(state&&state.age||18)];
+const ageNote=age=>t('note_'+bandOf(age));
+function clampLevel(){if(!state||state.level==null)return;const L=B().levels;if(!L.includes(state.level))state.level=state.level<L[0]?L[0]:L[L.length-1];}
+
+/* ---------- storage: several profiles per account ---------- */
+const KEY='mathgym.v1';
+function freshProfile(nick,age){return{id:'p'+Date.now().toString(36)+Math.floor(Math.random()*1e5).toString(36),nick:nick||'',age:age||null,level:null,placement:null,topics:{},lessons:{},xp:0,streak:{n:0,day:null},totals:{a:0,c:0},history:[]};}
+function freshStore(){return{v:3,lang,activeId:null,profiles:{},updatedAt:0};}
+function migrate(s){
+  if(!s||typeof s!=='object')return freshStore();
+  if(s.v>=3&&s.profiles)return Object.assign(freshStore(),s);
+  const st=freshStore();if(s.lang&&LANGS[s.lang])st.lang=s.lang;
+  if((s.totals&&s.totals.a)||s.level||s.placement){const p=Object.assign(freshProfile(),{level:s.level??null,placement:s.placement||null,topics:s.topics||{},lessons:s.lessons||{},xp:s.xp||0,streak:s.streak||{n:0,day:null},totals:s.totals||{a:0,c:0},history:s.history||[]});st.profiles[p.id]=p;st.activeId=p.id;}
+  st.updatedAt=s.updatedAt||0;return st;
+}
+let store=freshStore();
+try{const s=localStorage.getItem(KEY);if(s)store=migrate(JSON.parse(s));}catch(e){}
+if(store.lang&&LANGS[store.lang])lang=store.lang;else store.lang=lang;
+let state=store.profiles[store.activeId]||null;
+const needsProfile=()=>!state||!state.nick||!state.age;
+const remote={status:'local',ref:null};
+let saveTimer=null,writing=false,again=false;
+function save(){
+  store.updatedAt=Date.now();store.lang=lang;
+  try{localStorage.setItem(KEY,JSON.stringify(store));}catch(e){}
+  if(remote.ref){clearTimeout(saveTimer);saveTimer=setTimeout(flush,700);}
+}
+async function flush(retried){
+  if(!remote.ref)return;
+  if(writing){again=true;return;}
+  writing=true;
+  try{await remote.ref.set(JSON.parse(JSON.stringify(store)));remote.status='synced';}
+  catch(e){if(e&&e.code==='unavailable'&&!retried){writing=false;setTimeout(()=>flush(true),1200+Math.random()*1200);return;}remote.status='local';remote.ref=null;}
+  writing=false;renderStatus();
+  if(again){again=false;flush();}
+}
+async function initRemote(){remote.status='local';renderStatus();}
+function renderStatus(){
+  document.getElementById('sync').innerHTML=remote.status==='synced'?`<span class="dot on"></span>${t('synced')}`:remote.status==='connecting'?`<span class="dot"></span>${t('connecting')}`:`<span class="dot"></span>${t('local')}`;
+  document.getElementById('tip').innerHTML=t('tip');
+}
+
+/* ---------- progress logic ---------- */
+function record(id,ok){
+  const s=state.topics[id]||(state.topics[id]={a:0,c:0,recent:[]});
+  s.a++;if(ok)s.c++;s.recent=[...s.recent,ok?1:0].slice(-10);
+  state.totals.a++;if(ok)state.totals.c++;
+  state.xp+=ok?10:2;
+  const d=today();
+  if(state.streak.day!==d){const y=new Date();y.setDate(y.getDate()-1);state.streak.n=state.streak.day===y.toLocaleDateString('en-CA')?state.streak.n+1:1;state.streak.day=d;}
+}
+function mast(id){const s=state.topics[id];if(!s||s.recent.length<3)return null;return s.recent.reduce((a,b)=>a+b,0)/s.recent.length;}
+function mastInfo(id){const m=mast(id),s=state.topics[id];const k=m===null?'new':(m>=0.8&&s.recent.length>=5)?'good':m>=0.6?'mid':'low';return[t('st_'+k),k];}
+function levelPct(l){const ts=TOPICS.filter(x=>x.level===l);return ts.reduce((a,x)=>a+(mast(x.id)||0),0)/ts.length;}
+function levelReady(l){const L=B().levels;return l<L[L.length-1]&&TOPICS.filter(x=>x.level===l).every(x=>{const s=state.topics[x.id];return s&&s.recent.length>=5&&mast(x.id)>=0.8;});}
+function streakNow(){const d=today();const y=new Date();y.setDate(y.getDate()-1);return(state.streak.day===d||state.streak.day===y.toLocaleDateString('en-CA'))?state.streak.n:0;}
+const curLevel=()=>state.level??B().levels[0];
+function buildMixed(n){
+  const lvl=curLevel(),pool=TOPICS.filter(x=>x.level===lvl),prev=B().levels.includes(lvl-1)?TOPICS.filter(x=>x.level===lvl-1):[];
+  const items=[],seen=new Set();let last=null;
+  while(items.length<n){
+    let tp;
+    if(prev.length&&Math.random()<0.15)tp=prev[Math.floor(Math.random()*prev.length)];
+    else{const ws=pool.map(x=>{const m=mast(x.id);return m===null?2.5:1+(1-m)*3;});let r=Math.random()*ws.reduce((a,b)=>a+b);tp=pool[pool.length-1];for(let i=0;i<pool.length;i++){r-=ws[i];if(r<=0){tp=pool[i];break;}}}
+    if(tp.id===last&&Math.random()<0.8)continue;
+    last=tp.id;items.push(mk(tp,seen));
+  }
+  return items;
+}
+function sessTitle(s){return s.mode==='placement'?t('placementTest'):s.topicId==='mixed'?t('mixedTitle',s.level):TT(s.topicId);}
+function histTitle(h){
+  if(typeof h.k==='string'&&!h.kind)return h.k;
+  const base=h.kind==='placement'?t('placementTest'):h.kind==='mixed'?t('mixedTitle',h.l):T[h.kind]?TT(h.kind):h.kind;
+  return base+(h.partial?t('partial'):'');
+}
+
+/* ---------- views ---------- */
+let view='home',S=null,curLesson=null,learnLevel=null,lastPlacement=null,confirmReset=false,regMode='new',confirmDel=null;
+const app=document.getElementById('app'),hdr=document.getElementById('hdr');
+
+function renderHeader(){
+  const inQuiz=view==='quiz',noProf=needsProfile();
+  const langs=`<div class="langsw" role="group" aria-label="${t('language')}">${Object.entries(LANGS).map(([k,v])=>`<button class="${k===lang?'on':''}" data-act="lang" data-arg="${k}" lang="${k}">${v}</button>`).join('')}</div>`;
+  if(noProf){hdr.innerHTML=`<div class="brand"><span class="logo">∑</span>Math Gym</div><nav></nav>${langs}`;return;}
+  hdr.innerHTML=`<div class="brand" data-act="go" data-arg="home"><span class="logo">∑</span>Math Gym</div>
+  <nav>${inQuiz?`<button data-act="quit">${S&&S.mode==='placement'?t('quitTest'):t('quitSession')}</button>`:
+   ['home','learn','progress'].map(v=>`<button class="${view===v||(v==='learn'&&view==='lesson')?'on':''}" data-act="go" data-arg="${v}">${t(v)}</button>`).join('')}</nav>
+  ${langs}
+  ${!inQuiz?`<button class="chip ${view==='profiles'?'on':''}" data-act="go" data-arg="profiles" title="${t('profiles')}"><span class="av">${esc(state.nick.slice(0,1).toUpperCase())}</span>${esc(state.nick)}</button>`:''}
+  ${state.level!=null&&!inQuiz?`<select class="lvlsel" id="lvlsel" aria-label="${t('thLevel')}">${B().levels.map(l=>`<option value="${l}" ${state.level===l?'selected':''}>${t('lvl',l,LN(l))}</option>`).join('')}</select>`:''}`;
+}
+function topicCard(tp){
+  const [lab,cls]=mastInfo(tp.id);const m=mast(tp.id);const s=state.topics[tp.id];
+  return`<div class="topic"><div class="row" style="justify-content:space-between"><span class="t">${TT(tp.id)}</span><span class="pill ${cls}">${lab}</span></div>
+  <div class="muted small">${tp.blurb[lang]}</div><div class="bar"><i style="width:${Math.round((m||0)*100)}%"></i></div>
+  <div class="small muted">${s?t('correctOf',s.c,s.a):t('notStarted')}${state.lessons[tp.id]?' · '+t('lessonRead'):''}</div>
+  <div class="row"><button class="btn sm" data-act="lesson" data-arg="${tp.id}">${t('lessonBtn')}</button><button class="btn sm primary" data-act="practice" data-arg="${tp.id}">${t('practiceBtn')}</button></div></div>`;
+}
+const statsRow=()=>{const acc=state.totals.a?Math.round(state.totals.c/state.totals.a*100)+'%':'–';return`<div class="stats"><div class="stat"><b>${streakNow()}</b><span>${t('sStreak')}</span></div><div class="stat"><b>${fmt(state.xp)}</b><span>${t('sXp')}</span></div><div class="stat"><b>${fmt(state.totals.a)}</b><span>${t('sAnswered')}</span></div><div class="stat"><b>${acc}</b><span>${t('sAcc')}</span></div></div>`;};
+const ageLine=()=>`<p class="small muted" style="margin-top:4px">${esc(t('ageLine',state.age,ageNote(state.age)))} · <a href="#" data-act="editProfile" style="color:var(--accent)">${t('changeProfile')}</a></p>`;
+function vRegister(){
+  const edit=regMode==='edit'||regMode==='complete';const p=edit&&state?state:{nick:'',age:''};
+  const back=regMode!=='complete'&&Object.keys(store.profiles).some(id=>store.profiles[id].nick&&store.profiles[id].age);
+  return`<div class="card hero" style="max-width:560px;margin:0 auto"><div class="eyebrow">${regMode==='edit'?t('profiles'):t('welcome')}</div><h1>${regMode==='edit'?t('regEditH'):t('regH')}</h1><p class="muted">${t('regP')}</p>
+  <form id="regform" autocomplete="off" style="margin-top:14px">
+   <label class="lab" for="nick">${t('nickL')}</label><input class="field" id="nick" maxlength="20" value="${esc(p.nick||'')}">
+   <label class="lab" for="age">${t('ageL')}</label><input class="field" id="age" type="number" min="6" max="99" inputmode="numeric" value="${p.age||''}" style="max-width:140px">
+   <div class="agenote" id="agenote">${agenoteHtml(p.age)}</div>
+   <div class="msg" id="regmsg"></div>
+   <div class="row" style="margin-top:6px"><button class="btn primary" type="submit">${regMode==='edit'?t('saveBtn'):t('cont')}</button>${back?`<button class="btn ghost" type="button" data-act="go" data-arg="${regMode==='edit'?'profiles':'profiles'}">${t('cancel')}</button>`:''}</div>
+  </form></div>`;
+}
+function agenoteHtml(age){age=+age;return`<b>${t('ageNoteH')}</b><br>${age>=6&&age<=99?esc(ageNote(age)):`<span class="muted">${t('note_kid')}<br>${t('note_pre')}<br>${t('note_teen')}<br>${t('note_adult')}</span>`}`;}
+function vProfiles(){
+  const ps=Object.values(store.profiles).filter(p=>p.nick&&p.age);
+  return`<h1>${t('profiles')}</h1><p class="muted">${t('profilesP')}</p>
+  <div class="card">${ps.map(p=>{const on=p.id===store.activeId;return`<div class="prow"><span class="av big">${esc(p.nick.slice(0,1).toUpperCase())}</span>
+   <div style="flex:1;min-width:0"><b>${esc(p.nick)}</b> ${on?`<span class="pill good">${t('active')}</span>`:''}<div class="small muted">${t('ageShort',p.age)} · ${p.level!=null?t('lvl',p.level,LN(p.level)):t('noLevel')} · ${fmt(p.xp)} XP</div></div>
+   <div class="row">${on?`<button class="btn sm" data-act="editProfile">${t('editBtn')}</button>`:`<button class="btn sm primary" data-act="switch" data-arg="${p.id}">${t('switchTo')}</button>${confirmDel===p.id?`<button class="btn sm" style="color:var(--low);border-color:var(--low)" data-act="delYes" data-arg="${p.id}">${t('delYes')}</button><button class="btn sm ghost" data-act="delNo">${t('cancel')}</button>`:`<button class="btn sm ghost" data-act="del" data-arg="${p.id}">${t('del')}</button>`}`}</div></div>`;}).join('')}
+  <div style="margin-top:14px"><button class="btn" data-act="addProfile">${t('addProfile')}</button></div></div>`;
+}
+function vHome(){
+  const L=B().levels;
+  if(state.level==null){
+    const plan=B().plan;
+    return`<div class="card hero"><div class="eyebrow">${t('hi',esc(state.nick))}</div><h1>${t('findH')}</h1><p>${t('findP',plan.length,L.map(l=>LN(l)).join(', '))}</p><p class="muted small">${t('findNote')}</p>${ageLine()}
+    <div class="row" style="margin-top:14px"><button class="btn primary" data-act="startPlacement">${t('startTest')}</button></div></div>
+    <div class="card"><h3>${t('pickH')}</h3><p class="muted small">${t('pickP')}</p>
+    <div class="levels">${L.map(l=>`<button class="lvlcard" data-act="setLevel" data-arg="${l}"><span class="muted small">${t('lvlShort',l)}</span><b>${LN(l)}</b><span class="muted small">${LD(l)}</span></button>`).join('')}</div></div>`;
+  }
+  const l=state.level,ts=TOPICS.filter(x=>x.level===l);
+  const unread=ts.find(x=>!state.lessons[x.id]);
+  const weakest=[...ts].sort((a,b)=>(mast(a.id)??-1)-(mast(b.id)??-1))[0];
+  return`${levelReady(l)?`<div class="banner">${t('banner',LN(l),l+1,LN(l+1))} <button class="btn sm" style="margin-left:8px" data-act="setLevel" data-arg="${l+1}">${t('moveUp')}</button></div>`:''}
+  <div class="card hero"><div class="eyebrow">${t('lvl',l,LN(l))}</div><h1>${t('hi',esc(state.nick))}</h1><p class="muted">${state.totals.a?t('keepGoing'):t('ready')} · ${LD(l)}</p>
+   <div class="bar" style="margin:10px 0 6px"><i style="width:${Math.round(levelPct(l)*100)}%"></i></div><p class="small muted">${t('levelMastery',Math.round(levelPct(l)*100))}</p>
+   <div class="row" style="margin-top:6px"><button class="btn primary" data-act="practice" data-arg="mixed">${t('mixedBtn')}</button>
+   ${unread?`<button class="btn" data-act="lesson" data-arg="${unread.id}">${t('nextLesson',TT(unread.id))}</button>`:`<button class="btn" data-act="practice" data-arg="${weakest.id}">${t('focusOn',TT(weakest.id))}</button>`}</div>${ageLine()}</div>
+  ${statsRow()}<h2>${t('yourTopics')}</h2><div class="grid">${ts.map(topicCard).join('')}</div>`;
+}
+function vLearn(){
+  const Ls=B().levels;const L=Ls.includes(learnLevel)?learnLevel:curLevel();
+  return`<h1>${t('learn')}</h1><p class="muted">${t('learnP')}</p>
+  <div class="tabs">${Ls.map(l=>`<button class="${L===l?'on':''}" data-act="learnLevel" data-arg="${l}">${l}. ${LN(l)}${state.level===l?' ★':''}</button>`).join('')}</div>
+  <div class="grid">${TOPICS.filter(x=>x.level===L).map(topicCard).join('')}</div>`;
+}
+function vLesson(){
+  const tp=T[curLesson];const sib=TOPICS.filter(x=>x.level===tp.level);const nxt=sib[sib.indexOf(tp)+1];
+  return`<div class="card lesson" style="max-width:700px;margin:0 auto 16px"><div class="eyebrow">${t('lvl',tp.level,LN(tp.level))}</div><h1>${TT(tp.id)}</h1>${tp.lesson[lang]()}
+  <div class="row" style="margin-top:18px"><button class="btn primary" data-act="practice" data-arg="${tp.id}">${t('practiceThis')}</button>${nxt?`<button class="btn" data-act="lesson" data-arg="${nxt.id}">${t('nextLesson',TT(nxt.id))}</button>`:''}<button class="btn ghost" data-act="go" data-arg="learn">${t('allLessons')}</button></div></div>`;
+}
+const ansText=q=>q.show||(fmt(q.ans)+(q.unit&&q.unit!=='$'?' '+q.unit:''));
+function vQuiz(){
+  const q=Q(S.items[S.i]),r=S.res[S.i],n=S.items.length,isP=S.mode==='placement';
+  const fb=S.checked?`<div class="fb ${r.ok?'ok':'bad'}"><div class="h">${r.ok?t('correct'):r.skipped?t('howItWorks'):t('notQuite')}${r.ok?'':` · ${t('answer')}: ${ansText(q)}`}</div>${q.explain}</div>`:'';
+  return`<div class="qwrap"><div class="qtop"><span>${esc(sessTitle(S))}${!isP&&S.topicId==='mixed'?` · ${TT(q.topic)}`:''}</span><span>${S.i+1} / ${n}</span></div>
+  <div class="qbar"><i style="width:${(S.i+(S.checked?1:0))/n*100}%"></i></div>
+  <div class="card"><div class="qtext">${q.q}</div>
+  <form id="qform" autocomplete="off"><div class="ansrow">${q.unit==='$'?'<span class="unit">$</span>':''}<input id="ans" placeholder="${t('yourAnswer')}" ${S.checked?'readonly':''} class="${S.checked?(r.ok?'ok':'bad'):''}" value="${S.checked?esc(r.raw||''):esc(S.draft||'')}" aria-label="${t('yourAnswer')}">${q.unit&&q.unit!=='$'?`<span class="unit">${q.unit}</span>`:''}</div>
+  ${q.hint?`<div class="hint">${q.hint}</div>`:''}<div class="msg" id="msg"></div>
+  <div class="row">${S.checked?`<button class="btn primary" type="submit">${S.i+1<n?t('next'):t('seeResults')}</button>`:
+   `<button class="btn primary" type="submit">${isP?(S.i+1<n?t('next'):t('finish')):t('check')}</button><button class="btn ghost" type="button" data-act="skip">${t('idk')}</button>`}</div></form>${fb}</div></div>`;
+}
+function reviewList(items,res){
+  return items.map((it,i)=>{const q=Q(it);const r=res[i]||{};return`<details><summary><span class="mark ${r.ok?'ok':'bad'}">${r.ok?'✓':'✗'}</span><span>${q.q.replace(/<br>/g,' · ')} <span class="muted small">· ${TT(q.topic)}</span></span></summary>
+  <div class="body"><div class="small muted">${t('revYour')}: ${r.skipped?t('skipped'):esc(r.raw||'')} · ${t('revCorrect')}: ${ansText(q)}</div><div style="margin-top:6px">${q.explain}</div></div></details>`;}).join('');
+}
+function vPlacementResult(){
+  const pr=lastPlacement||{};const p=state.placement;const l=p.level;const lv=Object.keys(p.byLevel).map(Number).sort((a,b)=>a-b);
+  const msg=p.top?t('res4',LN(l)):l===lv[0]?t('res1'):t('resMid',LN(l-1),LN(l));
+  return`<div class="card hero"><div class="eyebrow">${t('resEyebrow',p.score,p.total)}</div><h1>${t('startAt',l,LN(l))}</h1><p class="muted">${LD(l)}</p><p>${msg}</p>
+  <div class="row"><button class="btn primary" data-act="go" data-arg="home">${t('goDash')}</button><button class="btn" data-act="lesson" data-arg="${TOPICS.find(x=>x.level===l).id}">${t('readFirst')}</button></div></div>
+  <div class="card"><h2>${t('byLevel')}</h2><table><tr><th>${t('thLevel')}</th><th></th><th class="num">${t('thScore')}</th></tr>
+  ${lv.map(k=>{const [c,tt]=p.byLevel[k];return`<tr><td>${k}. ${LN(k)}</td><td style="width:40%"><div class="bar"><i style="width:${c/tt*100}%"></i></div></td><td class="num">${c}/${tt}</td></tr>`;}).join('')}</table>
+  <p class="small muted" style="margin-top:10px">${t('passRule')}</p></div>
+  ${pr.items?`<div class="card"><h2>${t('reviewAns')}</h2>${reviewList(pr.items,pr.res)}</div>`:''}`;
+}
+function vSummary(){
+  const c=S.res.filter(r=>r&&r.ok).length,n=S.items.length;const xp=state.xp-S.startXp;const pct=c/n;
+  return`<div class="card hero" style="text-align:center"><div class="eyebrow">${esc(t('done',sessTitle(S)))}</div><div class="big">${c}/${n}</div>
+  <p class="muted" style="margin-top:8px">+${xp} XP · ${pct>=0.9?t('sum90'):pct>=0.7?t('sum70'):pct>=0.5?t('sum50'):t('sum0')}</p>
+  <div class="row" style="justify-content:center;margin-top:10px"><button class="btn primary" data-act="again">${t('again')}</button>${S.topicId&&S.topicId!=='mixed'?`<button class="btn" data-act="lesson" data-arg="${S.topicId}">${t('reread')}</button>`:''}<button class="btn ghost" data-act="go" data-arg="home">${t('dashboard')}</button></div></div>
+  <div class="card"><h2>${t('review')}</h2>${reviewList(S.items,S.res)}</div>`;
+}
+function vProgress(){
+  const p=state.placement;
+  return`<h1>${t('progress')}</h1>${statsRow()}
+  <div class="card"><h2>${t('masteryH')}</h2><p class="small muted">${t('masteryP')}</p>
+  <table><tr><th>${t('thTopic')}</th><th></th><th class="num">${t('thRecent')}</th><th class="num">${t('thAll')}</th></tr>
+  ${B().levels.map(l=>`<tr><td colspan="4" style="padding-top:16px"><b>${l}. ${LN(l)}</b>${state.level===l?` <span class="pill good">${t('current')}</span>`:''}</td></tr>`+TOPICS.filter(x=>x.level===l).map(x=>{const s=state.topics[x.id];const m=mast(x.id);const [lab,cls]=mastInfo(x.id);
+   return`<tr><td>${TT(x.id)} <span class="pill ${cls}">${lab}</span></td><td style="width:28%"><div class="bar"><i style="width:${Math.round((m||0)*100)}%"></i></div></td><td class="num">${m===null?'–':Math.round(m*100)+'%'}</td><td class="num">${s?`${s.c}/${s.a}`:'–'}</td></tr>`;}).join('')).join('')}</table></div>
+  <div class="card"><h2>${t('recent')}</h2>${state.history.length?`<table><tr><th>${t('thDate')}</th><th>${t('thSession')}</th><th class="num">${t('thScore')}</th></tr>${state.history.slice(-12).reverse().map(h=>`<tr><td class="small">${h.d}</td><td>${esc(histTitle(h))}</td><td class="num">${h.c}/${h.t}</td></tr>`).join('')}</table>`:`<p class="muted">${t('noSessions')}</p>`}</div>
+  <div class="card"><h2>${t('placementH')}</h2>${p?`<p>${t('taken',p.date,p.score,p.total,p.level,LN(p.level))}</p>`:`<p class="muted">${t('notTaken')}</p>`}
+  <div class="row"><button class="btn" data-act="startPlacement">${p?t('retake'):t('take')}</button>
+  ${confirmReset?`<button class="btn" style="color:var(--low);border-color:var(--low)" data-act="reset">${t('resetYes')}</button><button class="btn ghost" data-act="cancelReset">${t('cancel')}</button>`:`<button class="btn ghost" data-act="askReset">${t('resetAsk')}</button>`}</div></div>`;
+}
+
+function render(){
+  document.documentElement.lang=lang;
+  if(needsProfile()&&view!=='register'){view='register';regMode=state?'complete':'new';}
+  renderHeader();renderStatus();
+  app.innerHTML=view==='register'?vRegister():view==='profiles'?vProfiles():view==='home'?vHome():view==='learn'?vLearn():view==='lesson'?vLesson():view==='quiz'?vQuiz():view==='placementResult'?vPlacementResult():view==='summary'?vSummary():vProgress();
+  if(view==='quiz'){const i=document.getElementById('ans');if(i&&!S.checked){i.focus();const v=i.value;i.value='';i.value=v;}else{const b=document.querySelector('#qform button[type=submit]');b&&b.focus();}}
+  if(view==='register'){const n=document.getElementById('nick');n&&!n.value&&n.focus();}
+}
+function go(v){view=v;confirmReset=false;confirmDel=null;render();try{window.scrollTo(0,0);}catch(e){}}
+
+/* ---------- quiz flow ---------- */
+function startPlacement(){const seen=new Set();S={mode:'placement',items:B().plan.map(id=>mk(T[id],seen)),i:0,res:[],checked:false,startXp:state.xp};go('quiz');}
+function startPractice(id){
+  const items=id==='mixed'?buildMixed(10):(()=>{const seen=new Set();return Array.from({length:8},()=>mk(T[id],seen));})();
+  if(state.level==null){state.level=T[id]?T[id].level:B().levels[0];save();}
+  S={mode:'practice',topicId:id,level:curLevel(),items,i:0,res:[],checked:false,startXp:state.xp};
+  go('quiz');
+}
+function grade(raw,skipped){
+  const q=S.items[S.i];const v=skipped?NaN:parseNum(raw);
+  const ok=!skipped&&Math.abs(v-q.ans)<=(q.tol??1e-6);
+  S.res[S.i]={raw,ok,skipped};S.draft='';
+  if(S.mode==='placement'){next();return;}
+  record(q.topic,ok);S.checked=true;save();render();
+}
+function next(){S.i++;S.checked=false;S.draft='';if(S.i>=S.items.length)finish();else render();}
+function finish(){
+  const c=S.res.filter(r=>r.ok).length,n=S.items.length;
+  const h={d:today(),c,t:n,kind:S.mode==='placement'?'placement':S.topicId,l:S.level??curLevel()};
+  state.history=[...state.history,h].slice(-50);
+  if(S.mode==='placement'){
+    const L=B().levels,by={};L.forEach(l=>by[l]=[0,0]);
+    S.items.forEach((q,i)=>{const l=T[q.topic].level;if(!by[l])by[l]=[0,0];by[l][1]++;if(S.res[i].ok)by[l][0]++;});
+    let lvl=L[L.length-1],top=true;
+    for(const l of L){const [cc,tt]=by[l];if(!tt)continue;if(cc<Math.round(tt*0.7)){lvl=l;top=false;break;}}
+    Object.keys(by).forEach(k=>{if(!by[k][1])delete by[k];});
+    state.placement={date:today(),score:c,total:n,byLevel:by,level:lvl,top};state.level=lvl;learnLevel=null;
+    lastPlacement={items:S.items,res:S.res};save();go('placementResult');return;
+  }
+  save();go('summary');
+}
+
+/* ---------- events ---------- */
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-act]');if(!b)return;
+  if(b.tagName==='A')e.preventDefault();
+  const a=b.dataset.act,arg=b.dataset.arg;
+  if(a==='go')go(arg);
+  else if(a==='lang'){if(view==='quiz'&&S&&!S.checked){const i=document.getElementById('ans');if(i)S.draft=i.value;}
+    const keep=view==='register'?{nick:(document.getElementById('nick')||{}).value,age:(document.getElementById('age')||{}).value}:null;
+    lang=arg;save();render();
+    if(keep){if(keep.nick!=null)document.getElementById('nick').value=keep.nick;if(keep.age!=null){document.getElementById('age').value=keep.age;document.getElementById('agenote').innerHTML=agenoteHtml(keep.age);}}}
+  else if(a==='startPlacement')startPlacement();
+  else if(a==='setLevel'){state.level=+arg;clampLevel();learnLevel=null;save();go('home');}
+  else if(a==='practice')startPractice(arg);
+  else if(a==='lesson'){curLesson=arg;if(!state.lessons[arg]){state.lessons[arg]=1;save();}go('lesson');}
+  else if(a==='learnLevel'){learnLevel=+arg;render();}
+  else if(a==='skip')grade('',true);
+  else if(a==='quit'){if(S&&S.mode==='practice'){const done=S.res.filter(Boolean);if(done.length){state.history=[...state.history,{d:today(),kind:S.topicId,l:S.level,partial:true,c:done.filter(r=>r.ok).length,t:done.length}].slice(-50);save();}}S=null;go('home');}
+  else if(a==='again')startPractice(S.topicId);
+  else if(a==='askReset'){confirmReset=true;render();}
+  else if(a==='cancelReset'){confirmReset=false;render();}
+  else if(a==='reset'){const p=Object.assign(freshProfile(state.nick,state.age),{id:state.id});store.profiles[p.id]=p;state=p;confirmReset=false;save();go('home');}
+  else if(a==='editProfile'){regMode='edit';go('register');}
+  else if(a==='addProfile'){regMode='new';go('register');}
+  else if(a==='switch'){store.activeId=arg;state=store.profiles[arg];learnLevel=null;save();go('home');}
+  else if(a==='del'){confirmDel=arg;render();}
+  else if(a==='delNo'){confirmDel=null;render();}
+  else if(a==='delYes'){if(arg!==store.activeId){delete store.profiles[arg];}confirmDel=null;save();render();}
+});
+document.addEventListener('submit',e=>{
+  if(e.target.id==='regform'){
+    e.preventDefault();
+    const nick=document.getElementById('nick').value.trim().slice(0,20),age=parseInt(document.getElementById('age').value,10),msg=document.getElementById('regmsg');
+    if(!nick){msg.textContent=t('errNick');return;}
+    if(!(age>=6&&age<=99)){msg.textContent=t('errAge');return;}
+    if(regMode==='new'){const p=freshProfile(nick,age);store.profiles[p.id]=p;store.activeId=p.id;state=p;}
+    else{state.nick=nick;state.age=age;clampLevel();}
+    learnLevel=null;save();go(regMode==='edit'?'profiles':'home');return;
+  }
+  if(e.target.id!=='qform')return;e.preventDefault();
+  if(S.checked){next();return;}
+  const raw=document.getElementById('ans').value;
+  if(!raw.trim()||isNaN(parseNum(raw))){document.getElementById('msg').textContent=raw.trim()?t('msgNum'):t('msgType');return;}
+  grade(raw,false);
+});
+document.addEventListener('input',e=>{if(e.target.id==='age'){const n=document.getElementById('agenote');if(n)n.innerHTML=agenoteHtml(e.target.value);}});
+document.addEventListener('change',e=>{if(e.target.id==='lvlsel'){state.level=+e.target.value;learnLevel=null;save();render();}});
+
+render();initRemote();
+
+</script>
+<script>
+// no pinch or double-tap zoom: the page only scrolls
+['gesturestart','gesturechange','gestureend'].forEach(ev=>document.addEventListener(ev,e=>e.preventDefault(),{passive:false}));
+document.addEventListener('touchmove',e=>{if(e.touches.length>1||(e.scale&&e.scale!==1))e.preventDefault();},{passive:false});
+let lastTap=0;document.addEventListener('touchend',e=>{const n=Date.now();if(n-lastTap<300&&!e.target.closest('input,select,textarea'))e.preventDefault();lastTap=n;},{passive:false});
+if('serviceWorker' in navigator&&location.protocol.startsWith('http')){window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));}
+try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist();}catch(e){}
+</script>
+</body>
+</html>
